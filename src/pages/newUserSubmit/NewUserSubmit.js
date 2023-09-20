@@ -116,12 +116,6 @@ export default function NewUserSubmit() {
                   autoComplete="zipCode"
                 />
               </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                />
-              </Grid>
             </Grid>
             <Button
               type="submit"
@@ -129,7 +123,7 @@ export default function NewUserSubmit() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign Up
+              Submit
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
