@@ -30,7 +30,7 @@ function Home() {
           </thead>
           <tbody>
             {users.map(user => {
-              <tr>
+              return <tr>
                 <td>{user.name.first}</td>
                 <td>{user.name.last}</td>
                 <td>{user.name.email}</td>
