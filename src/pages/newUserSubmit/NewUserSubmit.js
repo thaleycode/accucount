@@ -10,7 +10,6 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Axios from '../../Axios'
-import { useNavigate } from 'react-router-dom';
 
 function Copyright(props) {
   return (
@@ -29,6 +28,20 @@ export default function NewUserSubmit() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    
+    const date = new Date();
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+    let passwordExpiryMonth = month + 6;
+
+    
+    let currentDate = `${year}-${month}-${day}`;
+    let passwordExpiryDate = new Date(`${year}-${passwordExpiryMonth}-${day}`);
+    let userMonthComponent = String(month).padStart(2, '0');
+    
+    console.log(currentDate)
+
     const firstName = data.get('firstName');
     const lastName = data.get('lastName');
     const street = data.get('street');
@@ -36,19 +49,22 @@ export default function NewUserSubmit() {
     const state = data.get('state');
     const zip = data.get('zip');
     const email = data.get('email');
+    const password = data.get('password');
 
+    const passwordExpiry = passwordExpiryDate;
+    const active = false;
+    const reactivateDate = null;
+    const deactivateDate = null;
+
+    const username = firstName.toLowerCase().charAt(0) + lastName.toLowerCase() + userMonthComponent + (year%100);
+
+    
+    Axios.post("/login/add", {username, email, password, passwordExpiry, active, deactivateDate, reactivateDate})
+      .then()
+      .catch((error) => alert(error.message))
     Axios.post("/user/add", {firstName, lastName, street, city, state, zip, email})
       .then(window.location = '/formSubmitted')
       .catch((error) => alert(error.message))
-
-
-    /*console.log({
-      email: data.get('firstName'),
-      password: data.get('password'),
-      lastName: data.get('lastName'),
-    });
-    console.log(data.lastName'));
-    */
   };
 
   return (
@@ -78,6 +94,16 @@ export default function NewUserSubmit() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="password"
+                  label="Password"
+                  name="password"
+                  autoComplete="password"
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
