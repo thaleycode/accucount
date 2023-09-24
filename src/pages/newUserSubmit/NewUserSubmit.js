@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -25,15 +26,43 @@ function Copyright(props) {
 }
 
 export default function NewUserSubmit() {
+
+  const [errorMessage, setErrorMessage] = useState("");
+
+  function handlePassword(event) {
+    const new_pass = event.target.value;
+
+
+    // regular expressions to validate password
+    const lowerCase = /[a-z]/g;
+    const upperCase = /[A-Z]/g;
+    const numbers = /[0-9]/g;
+    const specialChar = /[\!\@\#\$\%\^\&\*\)\(\+\=\.\<\>\{\}\[\]\:\;\'\"\|\~\`\_\-]/g;
+    if ((!new_pass.charAt(0).match(lowerCase)) && (!new_pass.charAt(0).matchupperCase)) {
+      setErrorMessage("Password should start with a letter");
+    } else if (!new_pass.match(upperCase)) {
+       setErrorMessage("Password should contain uppercase letters!");
+    } else if (!new_pass.match(lowerCase)) {
+      setErrorMessage("Password should contain lowercase letters!");
+    } else if (!new_pass.match(numbers)) {
+       setErrorMessage("Password should contain a number!");
+    } else if (!new_pass.match(specialChar)) {
+      setErrorMessage("Password should contain a special character (!, @, #, $, etc)");
+    } else if (new_pass.length < 8) {
+       setErrorMessage("Password length should be 8 or more characters.");
+    } else {
+       setErrorMessage(""); 
+    }
+ }
+
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     
     const date = new Date();
-    const day = date.getDate();
     const month = date.getMonth() + 1;
     const year = date.getFullYear();
-    const passwordExpiryMonth = month + 6;
 
     
     const passwordExpiryDate = date.setMonth(date.getMonth() + 6);
@@ -104,8 +133,10 @@ export default function NewUserSubmit() {
                   label="Password"
                   name="password"
                   autoComplete="password"
+                  onChange={handlePassword}
                 />
               </Grid>
+              <div style = {{ color: "red" }}> {errorMessage} </div>
               <Grid item xs={12} sm={6}>
                 <TextField
                   autoComplete="given-name"
