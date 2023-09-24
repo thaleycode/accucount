@@ -12,6 +12,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { useNavigate } from 'react-router-dom';
+import Axios from '../../Axios';
 
 function Copyright(props) {
   return (
@@ -32,11 +33,18 @@ export default function LogIn() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      username: data.get('username'),
-      password: data.get('password'),
-    });
-    navigate('/');
+    
+    const username = data.get('username');
+    const password = data.get('password');
+    
+    Axios.post("/login/", {username, password})
+      .then(result => {console.log(result)
+        if (result.data === "Success") {
+          console.log(result)
+          navigate('/')
+        }
+      })
+      .catch((error) =>alert(error.message))
   };
 
   return (
@@ -77,10 +85,6 @@ export default function LogIn() {
               type="password"
               id="password"
               autoComplete="current-password"
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
             />
             <Button
               type="submit"

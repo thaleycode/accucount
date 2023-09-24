@@ -30,17 +30,15 @@ export default function NewUserSubmit() {
     const data = new FormData(event.currentTarget);
     
     const date = new Date();
-    let day = date.getDate();
-    let month = date.getMonth() + 1;
-    let year = date.getFullYear();
-    let passwordExpiryMonth = month + 6;
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    const passwordExpiryMonth = month + 6;
 
     
-    let currentDate = `${year}-${month}-${day}`;
-    let passwordExpiryDate = new Date(`${year}-${passwordExpiryMonth}-${day}`);
-    let userMonthComponent = String(month).padStart(2, '0');
+    const passwordExpiryDate = date.setMonth(date.getMonth() + 6);
+    const userMonthComponent = String(month).padStart(2, '0');
     
-    console.log(currentDate)
 
     const firstName = data.get('firstName');
     const lastName = data.get('lastName');
@@ -53,11 +51,12 @@ export default function NewUserSubmit() {
 
     const passwordExpiry = passwordExpiryDate;
     const active = false;
-    const reactivateDate = null;
-    const deactivateDate = null;
+    const reactivateDate = new Date(1975, 0, 1, 0, 0, 0, 0);
+    const deactivateDate = new Date(1975, 0, 2, 0, 0, 0, 0);
 
     const username = firstName.toLowerCase().charAt(0) + lastName.toLowerCase() + userMonthComponent + (year%100);
 
+    console.log(passwordExpiry)
     
     Axios.post("/login/add", {username, email, password, passwordExpiry, active, deactivateDate, reactivateDate})
       .then()
