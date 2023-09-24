@@ -39,7 +39,7 @@ export default function LogIn() {
     
     Axios.post("/login/", {username, password})
       .then(result => {console.log(result)
-        if (result.data === "Success") {
+        if (result.data === "Logged in") {
           console.log(result)
           navigate('/')
         }

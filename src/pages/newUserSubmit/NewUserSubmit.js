@@ -48,6 +48,7 @@ export default function NewUserSubmit() {
     const zip = data.get('zip');
     const email = data.get('email');
     const password = data.get('password');
+    const DOB = data.get('DOB');
 
     const passwordExpiry = passwordExpiryDate;
     const active = false;

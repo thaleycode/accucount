@@ -7,7 +7,8 @@ const UserInfoSchema = new mongoose.Schema({
     city: String,
     state: String,
     zip: Number,
-    email: String
+    email: String,
+    DOB: Date
 });
 
 const UserInfoModel = mongoose.model("userInfo", UserInfoSchema);
