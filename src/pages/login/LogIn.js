@@ -28,7 +28,7 @@ function Copyright(props) {
 
 
 export default function LogIn() {
-  let navigate = useNavigate()
+  let navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -36,6 +36,7 @@ export default function LogIn() {
       username: data.get('username'),
       password: data.get('password'),
     });
+    navigate('/');
   };
 
   return (
