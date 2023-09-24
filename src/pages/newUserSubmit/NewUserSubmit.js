@@ -3,14 +3,14 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import Axios from '../../Axios'
+import { useNavigate } from 'react-router-dom';
 
 function Copyright(props) {
   return (
@@ -29,10 +29,26 @@ export default function NewUserSubmit() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
+    const firstName = data.get('firstName');
+    const lastName = data.get('lastName');
+    const street = data.get('street');
+    const city = data.get('city');
+    const state = data.get('state');
+    const zip = data.get('zip');
+    const email = data.get('email');
+
+    Axios.post("/user/add", {firstName, lastName, street, city, state, zip, email})
+      .then(window.location = '/formSubmitted')
+      .catch((error) => alert(error.message))
+
+
+    /*console.log({
+      email: data.get('firstName'),
       password: data.get('password'),
+      lastName: data.get('lastName'),
     });
+    console.log(data.lastName'));
+    */
   };
 
   return (
@@ -54,6 +70,16 @@ export default function NewUserSubmit() {
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
+            <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
+                />
+              </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
                   autoComplete="given-name"
@@ -79,10 +105,10 @@ export default function NewUserSubmit() {
                 <TextField
                   required
                   fullWidth
-                  id="streetAddress"
+                  id="street"
                   label="Street Address"
-                  name="streetAddress"
-                  autoComplete="streetAddress"
+                  name="street"
+                  autoComplete="street"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -110,9 +136,9 @@ export default function NewUserSubmit() {
                 <TextField
                   required
                   fullWidth
-                  id="zipCode"
+                  id="zip"
                   label="Zip Code"
-                  name="zipCode"
+                  name="zip"
                   autoComplete="zipCode"
                 />
               </Grid>
