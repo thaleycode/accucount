@@ -8,6 +8,7 @@ import { Navbar, Container, Nav } from 'react-bootstrap';
 import NewUserSubmit from './pages/newUserSubmit/NewUserSubmit';
 import Admin from './pages/admin/Admin';
 import TempSuspend from './pages/tempSuspend/TempSuspend';
+import FormSubmitted from './pages/formSubmitted/FormSubmitted';
 
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
         <Route path="/newUserSubmit" element={<NewUserSubmit />} />
         <Route path="/tempSuspend" element={<TempSuspend />} />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/formSubmitted" element={<FormSubmitted />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
     </Router>
