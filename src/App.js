@@ -6,6 +6,8 @@ import ForgotPassword from './pages/forgotPassword/ForgotPassword';
 import ErrorPage from './pages/errorPage/ErrorPage';
 import { Navbar, Container, Nav } from 'react-bootstrap';
 import NewUserSubmit from './pages/newUserSubmit/NewUserSubmit';
+import Admin from './pages/admin/Admin';
+import TempSuspend from './pages/tempSuspend/TempSuspend';
 
 
 function App() {
@@ -34,6 +36,8 @@ function App() {
         <Route path="/login" element={<LogIn />} />
         <Route path="/forgotPassword" element={<ForgotPassword />} />
         <Route path="/newUserSubmit" element={<NewUserSubmit />} />
+        <Route path="/tempSuspend" element={<TempSuspend />} />
+        <Route path="/admin" element={<Admin />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
     </Router>
