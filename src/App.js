@@ -9,6 +9,7 @@ import NewUserSubmit from './pages/newUserSubmit/NewUserSubmit';
 import Admin from './pages/admin/Admin';
 import TempSuspend from './pages/tempSuspend/TempSuspend';
 import FormSubmitted from './pages/formSubmitted/FormSubmitted';
+import logo from './img/logo.svg';
 
 
 function App() {
@@ -19,9 +20,9 @@ function App() {
           <Navbar.Brand as={ Link } to="/">
             <img
               alt=""
-              src="/img/logo.svg"
-              width="30"
-              height="30"
+              src={logo}
+              width="35"
+              height="35"
               className="d-inline-block align-top"
             />{' '}
             AccuCount

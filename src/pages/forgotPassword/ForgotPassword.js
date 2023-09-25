@@ -77,6 +77,30 @@ export default function ForgotPassword() {
               id="userID"
               autoComplete="userID"
             />
+            <br />
+            <br />
+            <div>What was the name of the street you grew up on?</div>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="securityQ1"
+              label="Security Question 1"
+              type="securityQ1"
+              id="securityQ1"
+              autoComplete="securityQ1"
+            />
+            <div>What was the name of your first pet?</div>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="securityQ2"
+              label="Security Question 2"
+              type="securityQ2"
+              id="securityQ2"
+              autoComplete="securityQ2"
+            />
             <Button
               type="submit"
               fullWidth
