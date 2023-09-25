@@ -5,7 +5,7 @@ const LogInSchema = new mongoose.Schema({
     email: String,
     password: String,
     passwordExpiry: Date,
-    active: Boolean,
+    active: {type: Boolean, default: false},
     deactivateDate: Date,
     reactivateDate: Date
 });
