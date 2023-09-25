@@ -7,6 +7,16 @@ function Admin() {
   const [button1Text, setButton1Text] = useState("Deactivate");
   const [button2Text, setButton2Text] = useState("Deactivate");
   const [button3Text, setButton3Text] = useState("Deactivate");
+  
+  // Create separate state variables for each username edit mode
+  const [user1Edit, setUser1Edit] = useState(false);
+  const [user2Edit, setUser2Edit] = useState(false);
+  const [user3Edit, setUser3Edit] = useState(false);
+  
+  // Create state variables for user names
+  const [user1Name, setUser1Name] = useState("User 1");
+  const [user2Name, setUser2Name] = useState("User 2");
+  const [user3Name, setUser3Name] = useState("User 3");
 
   // Function to handle button click and toggle text
   const handleButtonClick = (buttonNumber) => {
@@ -40,20 +50,31 @@ function Admin() {
 
       <div className="user-list">
         <div className="user-info">
-          <div className="user-name">User 1</div>
+          <div className="user-name">
+            {user1Edit ? (
+              <input
+                type="text"
+                value={user1Name}
+                onChange={(e) => setUser1Name(e.target.value)}
+              />
+            ) : (
+              user1Name
+            )}
+          </div>
           <div className="user-buttons">
             <button
               className="user-button"
-              onClick={() => handleButtonClick(1)}
+              onClick={() => setUser1Edit(!user1Edit)}
             >
-              Edit
+              {user1Edit ? "Save" : "Edit"}
             </button>
             <button
               className="user-button"
               onClick={() => handleButtonClick(1)}
             >
+              {button1Text === "Deactivate" ? "Deactivate" : "Activate"}
             </button>
-            <Link href="../tempSuspend">
+            <Link to="/tempSuspend">
               <button className="user-button">Temporary Suspend</button>
             </Link>
             <button
@@ -68,20 +89,31 @@ function Admin() {
 
       <div className="user-list">
         <div className="user-info">
-          <div className="user-name">User 2</div>
+          <div className="user-name">
+            {user2Edit ? (
+              <input
+                type="text"
+                value={user2Name}
+                onChange={(e) => setUser2Name(e.target.value)}
+              />
+            ) : (
+              user2Name
+            )}
+          </div>
           <div className="user-buttons">
             <button
               className="user-button"
-              onClick={() => handleButtonClick(2)}
+              onClick={() => setUser2Edit(!user2Edit)}
             >
-              Edit
+              {user2Edit ? "Save" : "Edit"}
             </button>
             <button
               className="user-button"
               onClick={() => handleButtonClick(2)}
             >
+              {button2Text === "Deactivate" ? "Deactivate" : "Activate"}
             </button>
-            <Link href="../TempSuspend">
+            <Link to="/tempSuspend">
               <button className="user-button">Temporary Suspend</button>
             </Link>
             <button
@@ -96,20 +128,31 @@ function Admin() {
 
       <div className="user-list">
         <div className="user-info">
-          <div className="user-name">User 3</div>
+          <div className="user-name">
+            {user3Edit ? (
+              <input
+                type="text"
+                value={user3Name}
+                onChange={(e) => setUser3Name(e.target.value)}
+              />
+            ) : (
+              user3Name
+            )}
+          </div>
           <div className="user-buttons">
             <button
               className="user-button"
-              onClick={() => handleButtonClick(3)}
+              onClick={() => setUser3Edit(!user3Edit)}
             >
-              Edit
+              {user3Edit ? "Save" : "Edit"}
             </button>
             <button
               className="user-button"
               onClick={() => handleButtonClick(3)}
             >
+              {button3Text === "Deactivate" ? "Deactivate" : "Activate"}
             </button>
-            <Link href="../TempSuspend">
+            <Link to="/tempSuspend">
               <button className="user-button">Temporary Suspend</button>
             </Link>
             <button
