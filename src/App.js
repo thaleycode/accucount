@@ -29,7 +29,7 @@ function App() {
           </Navbar.Brand>
             <Nav className="d-flex justify-content-end">
               <Nav.Link as={ Link } to="/login">LogIn</Nav.Link>
-              <Nav.Link as={ Link } to="/">LogOut</Nav.Link>
+              <Nav.Link as={ Link } to="/">Logout</Nav.Link>
             </Nav>
         </Container>
       </Navbar>
