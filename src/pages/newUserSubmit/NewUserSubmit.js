@@ -89,11 +89,14 @@ export default function NewUserSubmit() {
     console.log(passwordExpiry)
     
     Axios.post("/login/add", {username, email, password, passwordExpiry, active, deactivateDate, reactivateDate})
-      .then()
+      .then(
+        Axios.post("/user/add", {firstName, lastName, street, city, state, zip, email})
+        .then(window.location = '/formSubmitted')
+        .catch((error) => alert(error.message)))
       .catch((error) => alert(error.message))
-    Axios.post("/user/add", {firstName, lastName, street, city, state, zip, email})
-      .then(window.location = '/formSubmitted')
-      .catch((error) => alert(error.message))
+    //Axios.post("/user/add", {firstName, lastName, street, city, state, zip, email})
+      //.then(window.location = '/formSubmitted')
+      //.catch((error) => alert(error.message))
   };
 
   return (
