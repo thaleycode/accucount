@@ -21,3 +21,11 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# vars
+/backend/apiKey.txt
+/backend/atlas_uri.js
+
+
+# backup file
+/backend/serverbackup.txt
