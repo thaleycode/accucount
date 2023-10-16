@@ -23,8 +23,10 @@ yarn-debug.log*
 yarn-error.log*
 
 # vars
-/backend/apiKey.txt
+../backend/apiKey.txt
+../backend/atlas_uri.js
 /backend/atlas_uri.js
+/backend/apiKey.txt
 
 
 # backup file
