@@ -89,14 +89,18 @@ export default function NewUserSubmit() {
     console.log(passwordExpiry)
     
     Axios.post("/login/add", {username, email, password, passwordExpiry, active, deactivateDate, reactivateDate})
-      .then(
+      .then()
         Axios.post("/user/add", {firstName, lastName, street, city, state, zip, email})
         .then(window.location = '/formSubmitted')
-        .catch((error) => alert(error.message)))
+        .catch((error) => alert(error.message))
       .catch((error) => alert(error.message))
+      
+      //this is an alternative way to do both posts versus inside the .then() above
+      //this has been saved in comments in case it works out better to do it below or not
+
     //Axios.post("/user/add", {firstName, lastName, street, city, state, zip, email})
-      //.then(window.location = '/formSubmitted')
-      //.catch((error) => alert(error.message))
+    //  .then(window.location = '/formSubmitted')
+    //  .catch((error) => alert(error.message))
   };
 
   return (
