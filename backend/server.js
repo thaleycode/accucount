@@ -2,16 +2,34 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const uri = require('./atlas_uri');
-const UserModel = require('./dataModels/UserInfo');
-const LogInModel = require('./dataModels/LogIn');
+const UserModel = require('./dataModels/UserInfoModel');
+const LogInModel = require('./dataModels/LogInModel');
 const bcrypt = require('bcrypt');
+const session = require('express-session');
+const cookie = require('cookie-parser');
+const bodyParser = require('body-parser');
 
 const app = express();
 const port = 3001
 
-app.use(cors());
+app.use(cors({
+    origin: ["http://localhost:3000"],
+    methods: ["POST", "GET"],
+    credentials: true
+}));
 app.use(express.json());
-
+app.use(cookie());
+app.use(bodyParser.json());
+app.use(session({
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        secure: false,
+        maxAge: 1000 * 60 * 60 * 24
+    }
+}))
+ 
 
 
 mongoose.connect(uri, {
@@ -21,8 +39,16 @@ mongoose.connect(uri, {
 
 //APIs
 
-//test port to see if backend is functional
-app.get('/', (req, res) => res.status(200).send("Home Page"));
+//see if user is logged in, return name if true
+app.get('/', (req, res) => {
+    if (req.session.username) {
+        return res.json({valid: true, username: req.session.username, role: req.session.role})
+    } else {
+        return res.json({valid: false})
+    }
+})
+
+
 
 //post to MongoDB
 
@@ -31,7 +57,6 @@ app.get('/', (req, res) => res.status(200).send("Home Page"));
 //login to site
 app.post('/login/', (req,res) => {
     const {username, password} = req.body;
-    const hash = bcrypt
     LogInModel.findOne({username: username})
     .then (user => {
         if (user) {
@@ -40,7 +65,10 @@ app.post('/login/', (req,res) => {
                     return res.json("Incorrect password")
             }
                 if (response) {
-                    res.json("Logged in")
+                    req.session.username = user.username;
+                    req.session.role = user.role;
+                    console.log(req.session.username);
+                    res.json({info: "Logged in", username: req.session.username})
                 }
             })
         } else {
