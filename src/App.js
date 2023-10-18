@@ -9,6 +9,8 @@ import NewUserSubmit from './pages/newUserSubmit/NewUserSubmit';
 import Admin from './pages/admin/Admin';
 import TempSuspend from './pages/tempSuspend/TempSuspend';
 import FormSubmitted from './pages/formSubmitted/FormSubmitted';
+import UserForm from './pages/userForm/UserForm';
+import AccountList from './pages/accountList/AccountList';
 import logo from './img/logo.svg';
 
 
@@ -41,6 +43,8 @@ function App() {
         <Route path="/tempSuspend" element={<TempSuspend />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/formSubmitted" element={<FormSubmitted />} />
+        <Route path="/userForm" element={<UserForm />} />
+        <Route path="/accountList" element={<AccountList />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
     </Router>
