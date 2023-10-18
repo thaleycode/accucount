@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./UserForm.css";
 
 function UserForm() {
@@ -56,6 +56,42 @@ function UserForm() {
     }, 5000);
   };
 
+  const calculateAccountSubcatOptions = (priorValue) => {
+    const subcatBySelection = {
+      asset: ["Checking", "Petty Cash", "Inventory", "Accounts Receivable"],
+      liability: ["Payroll Tax", "Sales Tax Collected", "Accounts Payable", "Credit Memo Liability"],
+      equity: ["Owner's Equity", "Common Stock", "Retained Earnings"],
+      expenses: ["Payroll", "Insurance", "Rent"],
+      income: ["Sales", "Earned Interest", "Misc Income"],
+    };
+    return subcatBySelection[priorValue];
+  };
+
+  const [accountCategoryValue, setAccountCategoryValue] = useState('');
+  const [accountSubcategoryOptions, setAccountSubcategoryOptions] = useState([]);
+  
+  const initialAccountCatValue = calculateAccountSubcatOptions('asset')[0] || '';
+  const [accountSubcategoryValue, setAccountSubcategoryValue] = useState(initialAccountCatValue);
+
+  // Define a function to handle the change in the cat dropdown
+  const handleAccountCategoryChange = (event) => {
+    const selectedValue = event.target.value;
+    setAccountCategoryValue(selectedValue);
+
+    // Update the subcat dropdown options based on the selected value
+    const subcatOptions = calculateAccountSubcatOptions(selectedValue);
+    setAccountSubcategoryOptions(subcatOptions);
+  };
+
+  // handle the change in the subcat dropdown
+  const handleAccountSubcategoryChange = (event) => {
+    const selectedValue = event.target.value;
+    setAccountSubcategoryValue(selectedValue);
+  };
+
+
+  
+
   return (
     <div className="user-form">
       <h2>User Form</h2>
@@ -89,21 +125,24 @@ function UserForm() {
         </div>
         <div className="form-group">
           <label htmlFor="accountCategory">Account Category</label>
-          <input
-            type="text"
-            name="accountCategory"
-            value={formData.accountCategory}
-            onChange={handleInputChange}
-          />
+          <select id="accountCategory" value={accountCategoryValue} onChange={handleAccountCategoryChange}>
+            <option value=""></option>
+            <option value="asset">Asset</option>
+            <option value="liability">Liability</option>
+            <option value="equity">Equity</option>
+            <option value="income">Income</option>
+            <option value="expenses">Expenses</option>
+          </select>
         </div>
         <div className="form-group">
           <label htmlFor="accountSubcategory">Account Subcategory</label>
-          <input
-            type="text"
-            name="accountSubcategory"
-            value={formData.accountSubcategory}
-            onChange={handleInputChange}
-          />
+          <select id="accountSubcategory" value={accountSubcategoryValue} onChange={handleAccountSubcategoryChange}>
+          {accountSubcategoryOptions.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+          </select>
         </div>
         <div className="form-group">
           <label htmlFor="initialBalance">Initial Balance</label>
