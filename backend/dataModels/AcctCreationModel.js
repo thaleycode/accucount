@@ -13,7 +13,7 @@ const AcctCreationSchema = new mongoose.Schema({
     dateTimeAdded: Date,
     createdBy: String,
     order: Number,
-    statement: String
+    statement: String,
     comment: String
 });
 
