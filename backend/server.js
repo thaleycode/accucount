@@ -41,11 +41,17 @@ mongoose.connect(uri, {
 
 //see if user is logged in, return name if true
 app.get('/', (req, res) => {
-    if (req.session.username) {
+    if ((req.session.username) && (req.session.role)) {
         return res.json({valid: true, username: req.session.username, role: req.session.role})
     } else {
         return res.json({valid: false})
     }
+})
+
+//logout -- destroy session cookies
+app.get('/logout', (req, res) => {
+    req.session.destroy();
+    return res.json('success');
 })
 
 
