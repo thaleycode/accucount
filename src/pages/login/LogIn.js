@@ -13,6 +13,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { useNavigate } from 'react-router-dom';
 import Axios from '../../Axios';
+import { useEffect } from 'react';
 
 function Copyright(props) {
   return (
@@ -30,6 +31,18 @@ function Copyright(props) {
 
 export default function LogIn() {
   let navigate = useNavigate();
+  Axios.defaults.withCredentials = true;
+
+  useEffect(() => {
+    Axios.get('http://localhost:3001')
+    .then( res => {
+      if (res.data.valid) {
+        navigate('/');
+      }
+    })
+    .catch(err => console.log(err))
+  })
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -39,8 +52,8 @@ export default function LogIn() {
     
     Axios.post("/login/", {username, password})
       .then(result => {console.log(result)
-        if (result.data === "Logged in") {
-          console.log(result)
+        if (result.data.info === "Logged in") {
+          //console.log(result)
           navigate('/')
         }
       })
