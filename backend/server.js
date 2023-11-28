@@ -34,7 +34,7 @@ app.use(session({
 
 mongoose.connect(uri, {
     useNewUrlParser:true,
-    useUnifiedTopology:true
+    useUnifiedTopology:true,
 });
 
 //APIs

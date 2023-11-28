@@ -56,7 +56,7 @@ function UserForm() {
     }, 5000);
   };
 
-  const calculateAccountSubcatOptions = (priorValue) => {
+  const setAccountSubcatOptions = (priorValue) => {
     const subcatBySelection = {
       asset: ["Checking", "Petty Cash", "Inventory", "Accounts Receivable"],
       liability: ["Payroll Tax", "Sales Tax Collected", "Accounts Payable", "Credit Memo Liability"],
@@ -67,26 +67,44 @@ function UserForm() {
     return subcatBySelection[priorValue];
   };
 
+  const selectNormalSideText = (selectedAcct) => {
+
+    // Set the display text based on the selected value
+    if (selectedAcct === 'equity' || selectedAcct === 'liability' || selectedAcct === 'income') {
+      return ('Credit');
+    } else if (selectedAcct === 'asset' || selectedAcct === 'expenses') {
+      return ('Debit');
+    } else {
+      return ('<br>'); // Clear text if needed **********needs work
+    }
+  };
+
   const [accountCategoryValue, setAccountCategoryValue] = useState('');
   const [accountSubcategoryOptions, setAccountSubcategoryOptions] = useState([]);
   
-  const initialAccountCatValue = calculateAccountSubcatOptions('asset')[0] || '';
+  const initialAccountCatValue = setAccountSubcatOptions('asset')[0] || '';
   const [accountSubcategoryValue, setAccountSubcategoryValue] = useState(initialAccountCatValue);
 
-  // Define a function to handle the change in the cat dropdown
+  const initialNormalSideValue = setAccountSubcatOptions('asset')[0] || '';
+  const [normalSideText, setNormalSideText] = useState('');
+
+  // Handle the change in the cat dropdown
   const handleAccountCategoryChange = (event) => {
-    const selectedValue = event.target.value;
-    setAccountCategoryValue(selectedValue);
+    const selectedAcct = event.target.value;
+    setAccountCategoryValue(selectedAcct);
 
     // Update the subcat dropdown options based on the selected value
-    const subcatOptions = calculateAccountSubcatOptions(selectedValue);
+    const subcatOptions = setAccountSubcatOptions(selectedAcct);
     setAccountSubcategoryOptions(subcatOptions);
+
+    const normalSideText = selectNormalSideText(selectedAcct);
+    setNormalSideText(normalSideText)
   };
 
   // handle the change in the subcat dropdown
   const handleAccountSubcategoryChange = (event) => {
-    const selectedValue = event.target.value;
-    setAccountSubcategoryValue(selectedValue);
+    const selectedSubcat = event.target.value;
+    setAccountSubcategoryValue(selectedSubcat);
   };
 
 
@@ -115,15 +133,6 @@ function UserForm() {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="normalSide">Normal Side</label>
-          <input
-            type="text"
-            name="normalSide"
-            value={formData.normalSide}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div className="form-group">
           <label htmlFor="accountCategory">Account Category</label>
           <select id="accountCategory" value={accountCategoryValue} onChange={handleAccountCategoryChange}>
             <option value=""></option>
@@ -143,6 +152,15 @@ function UserForm() {
             </option>
           ))}
           </select>
+        </div>
+        <div className="form-group">
+          <label htmlFor="normalSide">Normal Side</label>
+          <div
+            type="text"
+            name="normalSide"
+            value={formData.normalSide}
+            onChange={handleInputChange}
+          >{normalSideText}</div>
         </div>
         <div className="form-group">
           <label htmlFor="initialBalance">Initial Balance</label>

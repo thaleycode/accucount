@@ -17,5 +17,5 @@ const AcctCreationSchema = new mongoose.Schema({
     comment: String
 });
 
-const AcctCreationModel = mongoose.model("logIn", AcctCreationSchema);
+const AcctCreationModel = mongoose.model("accounts", AcctCreationSchema);
 module.exports = AcctCreationModel;

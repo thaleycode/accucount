@@ -1,0 +1,21 @@
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    /* Add any other necessary styling */
+}
+
+table {
+    margin: 0 auto; /* Center the table horizontally */
+    border-collapse: collapse; /* For a cleaner look */
+    /* You can set a specific width or use 'width: 100%' if you want it to fill the container */
+}
+
+/* Styling for table headers and cells */
+th, td {
+    border: 1px solid #ddd; /* Example styling, adjust as needed */
+    padding: 8px;
+    text-align: center; /* or 'center' if you prefer */
+}

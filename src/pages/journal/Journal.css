@@ -1,0 +1,90 @@
+.top-links {
+    padding: 10px; /* Add padding to the top-links container */
+    display: flex; /* Make the links display in a row */
+  }
+  
+  .top-links a {
+    color: #000; /* Change the color to black or any color that suits your design */
+    text-decoration: none; /* Remove the underline from the links */
+     /* Add some spacing between links */
+    padding: 10px; /* Add padding to the links */
+    border: 1px solid #ccc; /* Add a border to create a tab-like appearance */
+    border-top-left-radius: 5px; /* Add border radius for rounded corners */
+    border-top-right-radius: 5px; /* Add border radius for rounded corners */
+  }
+  
+  /* Style the active link */
+  .top-links a.active {
+    background-color: #fff; /* Set a white background color for the active link */
+    color: #000; /* Change the text color for the active link */
+    border-color: #000; /* Border color for the active link */
+    border-bottom: none; /* Remove the bottom border for the active link */
+  }
+  
+  /* Style the non-active links */
+  .top-links a:not(.active) {
+    background-color: #ddd; /* Set a gray background color for non-active links */
+    color: #666; /* Set a gray text color for non-active links */
+    border-color: #000; /* Set a gray border color for non-active links */
+    border-bottom: #000;
+  }
+  
+  /* Indent the links from the left side of the browser window */
+  .top-links {
+    margin-left: 10%; /* Adjust the value as needed */
+  }
+  
+  .top-links a:hover {
+    text-decoration: underline; /* Add underline on hover (optional) */
+  }
+
+.table-container {
+    max-width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+    grid-template-columns: 10% 30% 30% 15% 15%;
+  }
+
+.doc-submit{
+    text-align: center;
+    max-width: 80%;
+}
+
+.comment{
+    max-width: 80%;
+}
+  
+  /* Additional styling for better spacing */
+  .dynamic-table th, .dynamic-table td {
+    padding: 8px;
+    text-align: left;
+  }
+  
+  /* Set the select and input elements to fill the cell width */
+  .dynamic-table select, .dynamic-table input {
+    width: 100%;
+    border: none
+  }
+  
+  /* Style for the Submit button */
+  .button-container {
+    display: block;
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  /* Style for the buttons in the table */
+  .button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .button:hover {
+    background-color: #0056b3;
+  }
+  
