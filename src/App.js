@@ -16,6 +16,7 @@ import ChartOfAccounts from './pages/chartOfAccounts/ChartOfAccounts';
 import GenerateReports from './pages/generateReports/GenerateReports';
 import Journal from './pages/journal/Journal';
 import Reports from './pages/reports/Reports';
+import UserManagement from './pages/userManagement/UserManagement';
 
 
 function App() {
@@ -53,6 +54,7 @@ function App() {
         <Route path="/journal" element={<Journal />} />
         <Route path="/generateReports" element={<GenerateReports />} />
         <Route path="/reports" element={<Reports />} />
+        <Route path="/userManagement" element={<UserManagement />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
     </Router>

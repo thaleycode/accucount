@@ -1,0 +1,145 @@
+.top-links {
+    padding: 10px;
+    /* Add padding to the top-links container */
+    display: flex;
+    /* Make the links display in a row */
+}
+
+.top-links a {
+    color: #000;
+    /* Change the color to black or any color that suits your design */
+    text-decoration: none;
+    /* Remove the underline from the links */
+    /* Add some spacing between links */
+    padding: 10px;
+    /* Add padding to the links */
+    border: 1px solid #ccc;
+    /* Add a border to create a tab-like appearance */
+    border-top-left-radius: 5px;
+    /* Add border radius for rounded corners */
+    border-top-right-radius: 5px;
+    /* Add border radius for rounded corners */
+}
+
+/* Style the active link */
+.top-links a.active {
+    background-color: #fff;
+    /* Set a white background color for the active link */
+    color: #000;
+    /* Change the text color for the active link */
+    border-color: #000;
+    /* Border color for the active link */
+    border-bottom: none;
+    /* Remove the bottom border for the active link */
+}
+
+/* Style the non-active links */
+.top-links a:not(.active) {
+    background-color: #ddd;
+    /* Set a gray background color for non-active links */
+    color: #666;
+    /* Set a gray text color for non-active links */
+    border-color: #000;
+    /* Set a gray border color for non-active links */
+    border-bottom: #000;
+}
+
+/* Indent the links from the left side of the browser window */
+.top-links {
+    margin-left: 10%;
+    /* Adjust the value as needed */
+}
+
+.top-links a:hover {
+    text-decoration: underline;
+    /* Add underline on hover (optional) */
+}
+
+.table-container {
+    max-width: 80%;
+    margin: 0 auto;
+    padding: 8px;
+    text-align: center;
+}
+
+.table-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.my-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.my-table th,
+.my-table td {
+    border: none;
+    padding: 8px;
+    text-align: center;
+}
+
+.my-table th {
+    background-color: #8c8dd5f5;
+    border-bottom: 2px solid #000
+}
+
+.grey-row {
+    background-color: #F5F5F5;
+}
+
+.white-row {
+    background-color: #FFF;
+}
+
+.top-buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+.bottom-buttons {
+    
+    display: flex;
+    justify-content: flex-end;
+    width: 80%;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+.left-button {
+    text-align: left;
+}
+
+.create-new-user-button {
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.right-button {
+    text-align: right;
+}
+
+.save-changes-button-top {
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.save-changes-button-bottom {
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.active-button,
+.inactive-button {
+    width: 120px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.inactive-button {
+    background-color: #dc3545;
+}
