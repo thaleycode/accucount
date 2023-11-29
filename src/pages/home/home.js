@@ -78,10 +78,39 @@ function Home(){
     // Add more leverage ratios here...
   ];
 
+  const pendingJournalEntries = [
+    {
+      date: "2023-11-22",
+      entryNumber: 12323,
+      user: "thal1023",
+    },
+    {
+      date: "2023-10-30",
+      entryNumber: 12344,
+      user: "jsmi1123",
+    },
+    // Add more pending journal entries here...
+  ];
+
+  const renderPendingJournalEntry = (entry) => (
+    <tr key={entry.entryNumber}>
+      <td>{entry.date}</td>
+      <td>{entry.entryNumber}</td>
+      <td>{entry.user}</td>
+      <td>
+        <button className="view-button">View</button>
+      </td>
+    </tr>
+  );
+
   // Function to render a single table row
   const renderTableRow = (ratio) => (
     <tr key={ratio.name}>
-      <td className={`status-circle ${ratio.status}`}></td>
+      <td className={`status-text ${ratio.status}`}>
+        {ratio.status === "good" && "Good"}
+        {ratio.status === "warning" && "Warning"}
+        {ratio.status === "alert" && "###Alert###"}
+      </td>
       <td>{ratio.name}</td>
       <td>{ratio.value}</td>
     </tr>
@@ -89,15 +118,41 @@ function Home(){
 
 
   return (
-    <div>
-        <div className="top-links">
-          <NavLink to="/" activeClassName="active">Home</NavLink>
-          <NavLink to="/chartOfAccounts">Chart of Accounts</NavLink>
-          <NavLink to="/journal">Journal Entries</NavLink>
-          <NavLink to="/generateReports">Generate Reports</NavLink>
-        </div>
-        <h1>Financial Ratios</h1>
-        <h3>Liquidity Ratios</h3>
+    <div style={{ marginBottom: '50px' }}>
+      <div className="top-links">
+        <NavLink to="/" activeClassName="active">Home</NavLink>
+        <NavLink to="/chartOfAccounts">Chart of Accounts</NavLink>
+        <NavLink to="/journal">Journal Entries</NavLink>
+        <NavLink to="/generateReports">Generate Reports</NavLink>
+      </div>
+      <h1>Financial Ratios</h1>
+      <h3>Liquidity Ratios</h3>
+      <table className="ratio-table">
+        <thead>
+          <tr>
+            <th>Status</th>
+            <th>Name</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          {liquidityRatios.map((ratio) => renderTableRow(ratio))}
+        </tbody>
+      </table>
+      <h3>Operating Efficiency Ratios</h3>
+      <table className="ratio-table">
+        <thead>
+          <tr>
+            <th>Status</th>
+            <th>Name</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          {operatingEfficiencyRatios.map((ratio) => renderTableRow(ratio))}
+        </tbody>
+      </table>
+      <h3>Profitability Ratios</h3>
         <table className="ratio-table">
           <thead>
             <tr>
@@ -107,48 +162,39 @@ function Home(){
             </tr>
           </thead>
           <tbody>
-            {liquidityRatios.map((ratio) => renderTableRow(ratio))}
+            {profitabilityRatios.map((ratio) => renderTableRow(ratio))}
           </tbody>
         </table>
-        <h3>Operating Efficiency Ratios</h3>
-        <table className="ratio-table">
-          <thead>
-            <tr>
-              <th>Status</th>
-              <th>Name</th>
-              <th>Value</th>
-            </tr>
-          </thead>
-          <tbody>
-            {operatingEfficiencyRatios.map((ratio) => renderTableRow(ratio))}
-          </tbody>
-        </table>
-        <h3>Profitability Ratios</h3>
-          <table className="ratio-table">
-            <thead>
-              <tr>
-                <th>Status</th>
-                <th>Name</th>
-                <th>Value</th>
-              </tr>
-            </thead>
-            <tbody>
-              {profitabilityRatios.map((ratio) => renderTableRow(ratio))}
-            </tbody>
-          </table>
-        <h3>Leverage Ratios</h3>
-        <table className="ratio-table">
-          <thead>
-            <tr>
-              <th>Status</th>
-              <th>Name</th>
-              <th>Value</th>
-            </tr>
-          </thead>
-          <tbody>
-            {leverageRatios.map((ratio) => renderTableRow(ratio))}
-          </tbody>
-        </table>
+      <h3>Leverage Ratios</h3>
+      <table className="ratio-table">
+        <thead>
+          <tr>
+            <th>Status</th>
+            <th>Name</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          {leverageRatios.map((ratio) => renderTableRow(ratio))}
+        </tbody>
+      </table>
+      <br></br>
+      <hr></hr>
+      <br></br>
+      <h1>Pending Journal Entries</h1>
+      <table className="pending-entry-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Entry Number</th>
+            <th>User</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {pendingJournalEntries.map((entry) => renderPendingJournalEntry(entry))}
+        </tbody>
+      </table>
     </div>
   );
 }
