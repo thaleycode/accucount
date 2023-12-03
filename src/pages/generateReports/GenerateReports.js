@@ -33,6 +33,7 @@ function GenerateReports() {
         <NavLink to="/chartOfAccounts">Chart of Accounts</NavLink>
         <NavLink to="/journal" activeClassName="active">Journal Entries</NavLink>
         <NavLink to="/generateReports">Generate Reports</NavLink>
+        <NavLink to="/userManagement">User Management</NavLink>
       </div>
       <div className="main-container">
         <h1>Generate Reports</h1>
