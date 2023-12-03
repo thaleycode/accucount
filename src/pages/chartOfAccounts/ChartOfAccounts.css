@@ -1,41 +1,40 @@
 .top-links {
-  padding: 10px; /* Add padding to the top-links container */
-  display: flex; /* Make the links display in a row */
+  padding: 10px; 
+  display: flex; 
 }
 
 .top-links a {
-  color: #000; /* Change the color to black or any color that suits your design */
-  text-decoration: none; /* Remove the underline from the links */
-   /* Add some spacing between links */
-  padding: 10px; /* Add padding to the links */
-  border: 1px solid #ccc; /* Add a border to create a tab-like appearance */
-  border-top-left-radius: 5px; /* Add border radius for rounded corners */
-  border-top-right-radius: 5px; /* Add border radius for rounded corners */
+  color: #000;
+  text-decoration: none; 
+  padding: 10px; 
+  border: 1px solid #ccc;
+  border-top-left-radius: 5px; 
+  border-top-right-radius: 5px; 
 }
 
-/* Style the active link */
+/* Active tab */
 .top-links a.active {
-  background-color: #fff; /* Set a white background color for the active link */
-  color: #000; /* Change the text color for the active link */
-  border-color: #000; /* Border color for the active link */
-  border-bottom: none; /* Remove the bottom border for the active link */
+  background-color: #fff; 
+  color: #000; 
+  border-color: #000; 
+  border-bottom: none; 
 }
 
-/* Style the non-active links */
+
 .top-links a:not(.active) {
-  background-color: #ddd; /* Set a gray background color for non-active links */
-  color: #666; /* Set a gray text color for non-active links */
-  border-color: #000; /* Set a gray border color for non-active links */
+  background-color: #ddd; 
+  color: #666; 
+  border-color: #000;
   border-bottom: #000;
 }
 
-/* Indent the links from the left side of the browser window */
+
 .top-links {
-  margin-left: 10%; /* Adjust the value as needed */
+  margin-left: 10%; 
 }
 
 .top-links a:hover {
-  text-decoration: underline; /* Add underline on hover (optional) */
+  text-decoration: underline; 
 }
 
 .table-container {
@@ -56,6 +55,10 @@
   border-collapse: collapse;
 }
 
+.my-table a {
+  color: black;
+  display: block;
+}
 .my-table th, .my-table td {
   border: none;
   padding: 8px;
@@ -73,4 +76,15 @@
 
 .white-row {
   background-color: #FFF;
+}
+
+.search-filter-container {
+  display: flex;
+  width: 80%;
+  height: 50px;
+  padding: 5px;
+}
+.search-input {
+  margin-right: 10px;
+  width: 45%;
 }
