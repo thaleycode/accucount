@@ -65,7 +65,8 @@ function Journal() {
           <NavLink to="/">Home</NavLink>
           <NavLink to="/chartOfAccounts">Chart of Accounts</NavLink>
           <NavLink to="/journal" activeClassName="active">Journal Entries</NavLink>
-          <NavLink to="/generateReports">Generate Reports</NavLink>
+        <NavLink to="/generateReports">Generate Reports</NavLink>
+        <NavLink to="/userManagement">User Management</NavLink>
         </div>
       <h1>Journal Entry</h1>
       <table className='table-container'>
