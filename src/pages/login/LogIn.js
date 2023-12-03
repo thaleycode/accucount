@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { useNavigate } from 'react-router-dom';
 import Axios from '../../Axios';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 function Copyright(props) {
   return (
@@ -29,6 +29,21 @@ function Copyright(props) {
 
 export default function LogIn() {
   let navigate = useNavigate();
+  const [loginAttempts, setLoginAttempts] = useState(0);
+  const [accountActive, setAccountActive] = useState(true);
+
+   const deactivateAccount = (data) => {
+    const username = data.get('username');
+    // Make an API call to deactivate the user's account
+    Axios.post("/deactivate-account", { username })
+      .then((result) => {
+        // Handle the result, e.g., show a message to the user
+      })
+      .catch((error) => {
+        alert("Failed to deactivate account: " + error.message);
+      });
+  };
+
   Axios.defaults.withCredentials = true;
 
   useEffect(() => {
@@ -48,14 +63,29 @@ export default function LogIn() {
     const username = data.get('username');
     const password = data.get('password');
     
-    Axios.post("/login/", {username, password})
-      .then(result => {console.log(result)
+    if (!accountActive) {
+      alert('Account is not active');
+      return;
+    }
+
+    Axios.post("/login/", { username, password })
+      .then(result => {
+        console.log(result)
         if (result.data.info === "Logged in") {
           //console.log(result)
+          setLoginAttempts(0);
           navigate('/')
         }
       })
-      .catch((error) =>alert(error.message))
+      .catch((error) => {
+        alert(error.message);
+        setLoginAttempts((prevAttempts) => prevAttempts + 1);
+
+        // Check if the maximum login attempts (3) have been reached
+        if (loginAttempts + 1 >= 3) {
+          deactivateAccount(data);
+        }
+      });
   };
 
   return (
@@ -97,6 +127,11 @@ export default function LogIn() {
               id="password"
               autoComplete="current-password"
             />
+            {accountActive ? null : (
+              <Typography variant="body2" color="error" align="center">
+                Account is not active
+              </Typography>
+            )}
             <Button
               type="submit"
               fullWidth
