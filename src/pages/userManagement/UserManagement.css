@@ -142,4 +142,6 @@
 
 .inactive-button {
     background-color: #dc3545;
+    color: #fff;
+    border-radius: 5px;
 }
