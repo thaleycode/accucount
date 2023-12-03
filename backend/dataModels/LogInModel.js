@@ -8,8 +8,8 @@ const LogInSchema = new mongoose.Schema({
     active: {type: Boolean, default: true},
     deactivateDate: Date,
     reactivateDate: Date,
-    role: {type: String, default: "user"} 
+    role: { type: String, default: "user" }
 });
 
-const LogInModel = mongoose.model("logIn", LogInSchema);
+const LogInModel = mongoose.model("logInInfo", LogInSchema);
 module.exports = LogInModel;
