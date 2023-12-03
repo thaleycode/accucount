@@ -11,6 +11,5 @@ const UserInfoSchema = new mongoose.Schema({
     DOB: Date
 });
 
-//test using sub folders in mongodb push 'users/userinfo'
-const UserInfoModel = mongoose.model("users/userInfo", UserInfoSchema);
+const UserInfoModel = mongoose.model("userInfo", UserInfoSchema);
 module.exports = UserInfoModel;
