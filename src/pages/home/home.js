@@ -109,7 +109,7 @@ function Home(){
       <td className={`status-text ${ratio.status}`}>
         {ratio.status === "good" && "Good"}
         {ratio.status === "warning" && "Warning"}
-        {ratio.status === "alert" && "###Alert###"}
+        {ratio.status === "alert" && "Alert"}
       </td>
       <td>{ratio.name}</td>
       <td>{ratio.value}</td>
@@ -124,6 +124,7 @@ function Home(){
         <NavLink to="/chartOfAccounts">Chart of Accounts</NavLink>
         <NavLink to="/journal">Journal Entries</NavLink>
         <NavLink to="/generateReports">Generate Reports</NavLink>
+        <NavLink to="/userManagement">User Management</NavLink>
       </div>
       <h1>Financial Ratios</h1>
       <h3>Liquidity Ratios</h3>

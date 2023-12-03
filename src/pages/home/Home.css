@@ -1,9 +1,5 @@
-
-/* Indent the links from the left side of the browser window */
-
-
 .top-links a:hover {
-  text-decoration: underline; /* Add underline on hover (optional) */
+  text-decoration: underline;
 }
 
 h1 {
@@ -17,19 +13,15 @@ h3 {
   padding-left: 10%;
 }
 
-.ratio-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-  max-width: 75%;
-  grid-template-columns: 20% 40% 40%;
-  
-}
-
 .ratio-table th,
 .ratio-table td {
   padding: 10px;
   text-align: left;
+  width: 33.33%;
+}
+
+.ratio-table {
+  width: 80%;
 }
 
 .ratio-table th {
@@ -37,19 +29,8 @@ h3 {
 }
 
 .ratio-table td {
-  padding: 10px; /* Add padding to create spacing */
+  padding: 10px;
   text-align: left;
-}
-
-.status-circle {
-  width: 2px;
-  height: 2px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  padding: 100px;
-  margin: 5%;
-  text-align: center;
 }
 
 .good {
@@ -64,53 +45,46 @@ h3 {
   color: #ff0033;
 }
 
-
-/* Home.css */
 .top-links {
-  padding: 10px; /* Add padding to the top-links container */
-  display: flex; /* Make the links display in a row */
+  padding: 10px;
+  display: flex;
 }
 
 .top-links a {
-  color: #000; /* Change the color to black or any color that suits your design */
-  text-decoration: none; /* Remove the underline from the links */
-   /* Add some spacing between links */
-  padding: 10px; /* Add padding to the links */
-  border: 1px solid #ccc; /* Add a border to create a tab-like appearance */
-  border-top-left-radius: 5px; /* Add border radius for rounded corners */
-  border-top-right-radius: 5px; /* Add border radius for rounded corners */
+  color: #000;
+  text-decoration: none;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
 }
 
-/* Style the active link */
 .top-links a.active {
-  background-color: #fff; /* Set a white background color for the active link */
-  color: #000; /* Change the text color for the active link */
-  border-color: #000; /* Border color for the active link */
-  border-bottom: none; /* Remove the bottom border for the active link */
+  background-color: #fff;
+  color: #000;
+  border-color: #000;
+  border-bottom: none;
 }
 
-/* Style the non-active links */
 .top-links a:not(.active) {
-  background-color: #ddd; /* Set a gray background color for non-active links */
-  color: #666; /* Set a gray text color for non-active links */
-  border-color: #000; /* Set a gray border color for non-active links */
+  background-color: #ddd;
+  color: #666;
+  border-color: #000;
   border-bottom: #000;
 }
 
 hr {
-  /* Set the border style, color, and width */
-  border: 2px rgb(0, 0, 54); /* Remove the default border */
-  background-color: rgb(0, 0, 54); /* Dark blue color */
-  height: 4px; /* Adjust the height of the horizontal rule */
-  width: 85%; /* 85% of the screen width */
-  margin: 0 auto; /* Center the <hr> horizontally */
+  border: 2px rgb(0, 0, 54);
+  background-color: rgb(0, 0, 54);
+  height: 4px;
+  width: 85%;
+  margin: 0 auto;
 }
 
 .pending-entry-table {
-  width: 100%;
+  width: 80%;
   border-collapse: collapse;
   margin-top: 10px;
-  max-width: 75%;
 }
 
 .pending-entry-table th,
@@ -150,6 +124,6 @@ hr {
   border: none;
   padding: 5px 10px;
   cursor: pointer;
-  margin: 0 auto; /* Center horizontally */
-  display: block; /* Make it a block-level element */
+  margin: 0 auto;
+  display: block;
 }
