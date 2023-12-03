@@ -77,10 +77,11 @@ export default function NewUserSubmit() {
     const zip = data.get('zip');
     const email = data.get('email');
     const password = data.get('password');
-    const DOB = data.get('DOB');
+    const securityQuestion1 = data.get('securityQuestion1');
+    const securityQuestion2 = data.get('securityQuestion2');
 
     const passwordExpiry = passwordExpiryDate;
-    const active = false;
+    const active = true;
     const reactivateDate = new Date(1975, 0, 1, 0, 0, 0, 0);
     const deactivateDate = new Date(1975, 0, 2, 0, 0, 0, 0);
 
@@ -88,12 +89,21 @@ export default function NewUserSubmit() {
 
     console.log(passwordExpiry)
     
-    Axios.post("/login/add", {username, email, password, passwordExpiry, active, deactivateDate, reactivateDate})
-      .then()
-        Axios.post("/user/add", {firstName, lastName, street, city, state, zip, email})
-        .then(window.location = '/formSubmitted')
-        .catch((error) => alert(error.message))
-      .catch((error) => alert(error.message))
+  Axios.post("/login/add", {username, email, password, passwordExpiry, active, deactivateDate, reactivateDate})
+    .then(() => {
+      return Axios.post("/user/add", {firstName, lastName, street, city, state, zip, email});
+    })
+    .then(() => {
+      return Axios.post('/security-questions', {username, securityQuestion1, securityQuestion2});
+    })
+    .then(() => {
+      console.log('All requests completed successfully');
+      window.location = '/formSubmitted';
+    })
+    .catch((error) => {
+      // Handle any errors that occur during the requests
+      console.error('Error:', error);
+    });
       
       //this is an alternative way to do both posts versus inside the .then() above
       //this has been saved in comments in case it works out better to do it below or not
@@ -204,6 +214,32 @@ export default function NewUserSubmit() {
                   label="Zip Code"
                   name="zip"
                   autoComplete="zipCode"
+                />
+              </Grid>
+            <Grid item xs={12}>
+            <Box sx={{ mt: 2, mb: 2 }} />
+            <Typography variant="h6" align="center">
+              Security Questions
+              </Typography>
+            </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="securityQuestion1"
+                  label="What street did you grow up on?"
+                  name="securityQuestion1"
+                  autoComplete="street"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="securityQuestion2"
+                  label="What is your father's middle name?"
+                  name="securityQuestion2"
+                  autoComplete="middleName"
                 />
               </Grid>
             </Grid>
