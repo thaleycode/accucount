@@ -88,7 +88,7 @@ function UserManagement() {
       };
     });
 
-    // Send the updated data to the server
+    // Send update to the server
     fetch('http://localhost:3001/update-users', {
       method: 'POST',
       headers: {

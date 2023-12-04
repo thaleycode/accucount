@@ -48,43 +48,64 @@
 
 .doc-submit{
     text-align: center;
-    max-width: 80%;
+    max-width: 40%;
 }
 
 .comment{
     max-width: 80%;
 }
   
-  /* Additional styling for better spacing */
+  
   .dynamic-table th, .dynamic-table td {
     padding: 8px;
     text-align: left;
   }
   
-  /* Set the select and input elements to fill the cell width */
+
   .dynamic-table select, .dynamic-table input {
     width: 100%;
     border: none
   }
   
-  /* Style for the Submit button */
+
   .button-container {
     display: block;
     margin-top: 20px;
     text-align: center;
   }
   
-  /* Style for the buttons in the table */
+
   .button {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #007bff;
     color: #fff;
     border: none;
     cursor: pointer;
   }
   
-  .button:hover {
-    background-color: #0056b3;
+.form-controls {
+  display: flex;
+  width: 80%;
+  flex-direction: column;
+  max-width: 80%;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: left;
+}
+
+.form-control {
+  margin-bottom: 10px;
+  border: none;
+}
+
+  .comments-section {
+    flex-grow: 1;
   }
-  
+
+  .doc-submit {
+    flex-basis: 40%;
+  }
+
+  .comment {
+    width: 100%;
+  }

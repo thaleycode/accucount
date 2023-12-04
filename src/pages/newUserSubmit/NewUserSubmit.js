@@ -11,6 +11,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Axios from '../../Axios'
+import { useNavigate } from 'react-router-dom';
+
 
 function Copyright(props) {
   return (
@@ -28,6 +30,7 @@ function Copyright(props) {
 export default function NewUserSubmit() {
 
   const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   function handlePassword(event) {
     const new_pass = event.target.value;
@@ -89,28 +92,18 @@ export default function NewUserSubmit() {
 
     console.log(passwordExpiry)
     
-  Axios.post("/login/add", {username, email, password, passwordExpiry, active, deactivateDate, reactivateDate})
+  Axios.post("/login/add", {username, email, password, passwordExpiry, active, deactivateDate, reactivateDate, securityQuestion1, securityQuestion2})
     .then(() => {
-      return Axios.post("/user/add", {firstName, lastName, street, city, state, zip, email});
-    })
-    .then(() => {
-      return Axios.post('/security-questions', {username, securityQuestion1, securityQuestion2});
+      Axios.post("/user/add", { firstName, lastName, street, city, state, zip, email });
     })
     .then(() => {
       console.log('All requests completed successfully');
-      window.location = '/formSubmitted';
+      navigate('/formSubmitted');
     })
     .catch((error) => {
       // Handle any errors that occur during the requests
       console.error('Error:', error);
     });
-      
-      //this is an alternative way to do both posts versus inside the .then() above
-      //this has been saved in comments in case it works out better to do it below or not
-
-    //Axios.post("/user/add", {firstName, lastName, street, city, state, zip, email})
-    //  .then(window.location = '/formSubmitted')
-    //  .catch((error) => alert(error.message))
   };
 
   return (

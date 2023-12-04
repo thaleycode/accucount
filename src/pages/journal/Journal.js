@@ -1,165 +1,305 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import './Journal.css';
 
 function Journal() {
-  const [data, setData] = useState([
+  const [journalData, setJournalData] = useState([
     {
       date: '',
       account1: '',
       account2: '',
-      debit: '',
-      credit: '',
+      debitAmount: '',
+      creditAmount: '',
     },
   ]);
 
+  const [debitAccounts, setDebitAccounts] = useState([]);
+  const [creditAccounts, setCreditAccounts] = useState([]);
+  const [selectedDocument, setSelectedDocument] = useState(null);
+
+  useEffect(() => {
+    // Fetch debit accounts data
+    fetch('http://localhost:3001/api/accounts?normalSide=Debit')
+      .then((response) => response.json())
+      .then((data) => {
+        const debitAccountsData = data.map((account) => ({
+          number: account.number,
+          name: account.name,
+        }));
+        setDebitAccounts(debitAccountsData);
+      })
+      .catch((error) => console.error('Error fetching debit accounts:', error));
+  }, []);
+
+  useEffect(() => {
+    // Fetch credit accounts data
+    fetch('http://localhost:3001/api/accounts?normalSide=Credit')
+      .then((response) => response.json())
+      .then((data) => {
+        const creditAccountsData = data.map((account) => ({
+          number: account.number,
+          name: account.name,
+        }));
+        setCreditAccounts(creditAccountsData);
+      })
+      .catch((error) => console.error('Error fetching credit accounts:', error));
+  }, []);
+
   const handleAddRow = () => {
-    setData((prevData) => [
-      ...prevData,
+    setJournalData((prevData) => [
+      ...prevData.map((row) => ({ ...row })),
       {
         date: '',
         account1: '',
         account2: '',
-        debit: '',
-        credit: '',
+        debitAmount: '',
+        creditAmount: '',
       },
     ]);
   };
-
-  const handleClear = () => {
-    setData([
-      {
-        date: '',
-        account1: '',
-        account2: '',
-        debit: '',
-        credit: '',
-      },
-    ]);
-    setComments('');
-    setAttachedDocument(null);
-  };
-
-  const [comments, setComments] = useState('');
-  const [attachedDocument, setAttachedDocument] = useState(null);
 
   const handleSelectChange = (index, fieldName, value) => {
-    const newData = [...data];
+    const newData = [...journalData];
     newData[index][fieldName] = value;
-    setData(newData);
+    setJournalData(newData);
   };
 
-  
-  const handleCommentsChange = (e) => {
-    setComments(e.target.value);
+  const handleAmountChange = (index, fieldName, value) => {
+    if (/^\d+(\.\d{0,2})?$/.test(value) || value === '') {
+      const newData = [...journalData];
+      newData[index][fieldName] = value;
+      setJournalData(newData);
+    }
   };
 
   const handleDocumentChange = (e) => {
     const file = e.target.files[0];
-    setAttachedDocument(file);
+    setSelectedDocument(file);
   };
+
+  const handleClear = () => {
+    setJournalData([
+      {
+        date: '',
+        account1: '',
+        account2: '',
+        debitAmount: '',
+        creditAmount: '',
+      },
+    ]);
+
+    const docInput = document.querySelector('.doc-submit');
+    if (docInput) {
+      docInput.value = '';
+    }
+  };
+
+const handleSubmit = async () => {
+  try {
+    // Create a FormData object to send the file
+    const formData = new FormData();
+    formData.append('file', selectedDocument);
+
+    // Send the file to the server for upload
+    const fileResponse = await fetch('http://localhost:3001/upload-file', {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (fileResponse.status === 200) {
+      // File upload succeeded, continue with journal entry submission
+      const { fileName } = await fileResponse.json();
+      const transAmt = [];
+
+      // Loop through all rows in journalData and add them to transAmt array
+      for (const row of journalData) {
+        const debitAmount = parseFloat(row.debitAmount);
+        const creditAmount = parseFloat(row.creditAmount);
+
+        if (!isNaN(debitAmount)) {
+          transAmt.push({
+            account: row.account1,
+            side: 'Debit',
+            amount: debitAmount,
+          });
+        }
+
+        if (!isNaN(creditAmount)) {
+          transAmt.push({
+            account: row.account2,
+            side: 'Credit',
+            amount: creditAmount,
+          });
+        }
+      }
+
+      // Construct the schema to submit
+      const journalEntry = {
+        transDate: journalData[0].date,
+        transAmt: transAmt,
+        comments: document.querySelector('.comment').value,
+        filePath: fileName, // Info from server submission
+        user: '', 
+        submitDateTime: new Date(),
+        transNumber: 1, // Needs to be made
+      };
+
+      console.log(fileResponse.fileName)
+
+      // Send the data to the server for MongoDB insertion
+      const response = await fetch('http://localhost:3001/submit-journal-entry', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ journalEntry }),
+      });
+
+      if (response.status === 200) {
+        // Clear the file input
+        setSelectedDocument(null);
+
+        // Clear the form and show a success message
+        setJournalData(
+          Array.from({ length: journalData.length }, () => ({
+            date: '',
+            account1: '',
+            account2: '',
+            debitAmount: '',
+            creditAmount: '',
+          }))
+        );
+        document.querySelector('.comment').value = '';
+        alert('Journal entry submitted successfully.');
+      } else {
+        alert('Failed to submit journal entry.');
+      }
+    } else {
+      alert('Failed to upload the file.');
+    }
+  } catch (error) {
+    console.error('Error submitting journal entry:', error);
+  }
+};
+
 
   return (
     <div>
-        <div className="top-links">
-          <NavLink to="/">Home</NavLink>
-          <NavLink to="/chartOfAccounts">Chart of Accounts</NavLink>
-          <NavLink to="/journal" activeClassName="active">Journal Entries</NavLink>
+      <div className="top-links">
+        <NavLink to="/">Home</NavLink>
+        <NavLink to="/chartOfAccounts">Chart of Accounts</NavLink>
+        <NavLink to="/journal" activeClassName="active">
+          Journal Entries
+        </NavLink>
         <NavLink to="/generateReports">Generate Reports</NavLink>
         <NavLink to="/userManagement">User Management</NavLink>
-        </div>
+      </div>
       <h1>Journal Entry</h1>
-      <table className='table-container'>
+      <table className="table-container">
         <thead>
           <tr>
             <th>Date</th>
-            <th>Account</th>
-            <th>Account</th>
-            <th>Debit</th>
-            <th>Credit</th>
+            <th>Debit Account</th>
+            <th>Credit Account</th>
+            <th>Debit Amount</th>
+            <th>Credit Amount</th>
           </tr>
         </thead>
         <tbody>
-          {data.map((row, index) => (
+          {journalData.map((row, index) => (
             <tr key={index}>
               <td>
-                <input
-                  type="date"
-                  value={row.date}
-                  onChange={(e) => handleSelectChange(index, 'date', e.target.value)}
-                />
+                {index === 0 ? (
+                  <input
+                    type="date"
+                    value={row.date}
+                    onChange={(e) => handleSelectChange(index, 'date', e.target.value)}
+                  />
+                ) : null}
               </td>
               <td>
                 <select
                   value={row.account1}
                   onChange={(e) => handleSelectChange(index, 'account1', e.target.value)}
-                  style={{ width: '100%' }} // Fill the cell width
+                  style={{ width: '100%' }}
+                  disabled={row.account2 !== ''}
                 >
                   <option value=""></option>
-                  <option value="Account A">1001 Cash</option>
-                  <option value="Account B">1002 Accounts Receivable</option>
-                  <option value="Account C">1003 Inventory</option>
+                  {debitAccounts.map((account) => (
+                    <option key={account.number} value={account.number}>
+                      {`${account.number} ${account.name}`}
+                    </option>
+                  ))}
                 </select>
               </td>
               <td>
                 <select
                   value={row.account2}
                   onChange={(e) => handleSelectChange(index, 'account2', e.target.value)}
-                  style={{ width: '100%' }} 
+                  style={{ width: '100%' }}
+                  disabled={row.account1 !== ''}
                 >
                   <option value=""></option>
-                  <option value="Account A">1001 Cash</option>
-                  <option value="Account B">1002 Accounts Receivable</option>
-                  <option value="Account C">1003 Inventory</option>
+                  {creditAccounts.map((account) => (
+                    <option key={account.number} value={account.number}>
+                      {`${account.number} ${account.name}`}
+                    </option>
+                  ))}
                 </select>
               </td>
               <td>
                 <input
                   type="text"
-                  value={row.debit}
-                  onChange={(e) => handleSelectChange(index, 'debit', e.target.value)}
+                  value={row.debitAmount}
+                  onChange={(e) => handleAmountChange(index, 'debitAmount', e.target.value)}
                   min="0"
-                  style={{ width: '100%' }} 
-                  inputMode="numeric" 
+                  style={{ width: '100%' }}
+                  inputMode="numeric"
+                  disabled={row.account2 !== ''}
                 />
               </td>
               <td>
                 <input
                   type="text"
-                  value={row.credit}
-                  onChange={(e) => handleSelectChange(index, 'credit', e.target.value)}
+                  value={row.creditAmount}
+                  onChange={(e) => handleAmountChange(index, 'creditAmount', e.target.value)}
                   min="0"
-                  style={{ width: '100%' }} // Fill the cell width
-                  inputMode="numeric" // Set inputMode for numeric input
+                  style={{ width: '100%' }}
+                  inputMode="numeric"
+                  disabled={row.account1 !== ''}
                 />
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <button   onClick={handleAddRow}>Add Row</button>
-
-      <div className="comments-section">
-        <textarea
-          className='comment'
-          placeholder="Comments"
-          value={comments}
-          onChange={handleCommentsChange}
-        ></textarea>
+      <div className="form-controls">
+        <div className="form-control">
+          <button onClick={handleAddRow}>Add Row</button>
+        </div>
+        <div className="form-control">
+          <div className="comments-section">
+            <textarea className="comment" placeholder="Comments"></textarea>
+          </div>
         </div>
         <div>
-        <input
-            className='doc-submit'
-          type="file"
-          accept=".pdf, .doc, .docx, .csv, .png, .jpg"
-          onChange={handleDocumentChange}
-        />
-      </div>
-
-
-      <div className="button-container">
-        <button className="button">Submit</button>
-        <button className="button" onClick={handleClear}>Clear</button>
+          <input
+            className="doc-submit"
+            type="file"
+            accept=".pdf, .doc, .docx, .csv, .png, .jpg"
+            onChange={handleDocumentChange}
+          />
+        </div>
+        <div className="form-control">
+          <div className="buttons">
+            <button className="button" onClick={handleSubmit}>
+              Submit
+            </button>
+            <button className="button" onClick={handleClear}>
+              Clear
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

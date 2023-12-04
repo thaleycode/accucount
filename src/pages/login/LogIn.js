@@ -70,21 +70,23 @@ export default function LogIn() {
 
     Axios.post("/login/", { username, password })
       .then(result => {
-        console.log(result)
         if (result.data.info === "Logged in") {
-          //console.log(result)
+          // The login was successful, so reset login attempts and redirect
           setLoginAttempts(0);
-          navigate('/')
+          navigate('/');
+        } else {
+          // The login failed, show an error message
+          alert("Login failed: " + result.data.info);
+          setLoginAttempts((prevAttempts) => prevAttempts + 1);
+
+          // Check if the maximum login attempts (3) have been reached
+          if (loginAttempts + 1 >= 3) {
+            deactivateAccount(data);
+          }
         }
       })
       .catch((error) => {
-        alert(error.message);
-        setLoginAttempts((prevAttempts) => prevAttempts + 1);
-
-        // Check if the maximum login attempts (3) have been reached
-        if (loginAttempts + 1 >= 3) {
-          deactivateAccount(data);
-        }
+        alert("Error: " + error.message);
       });
   };
 

@@ -7,10 +7,9 @@ import ForgotPassword from './pages/forgotPassword/ForgotPassword';
 import ErrorPage from './pages/errorPage/ErrorPage';
 import { Navbar, Container, Nav } from 'react-bootstrap';
 import NewUserSubmit from './pages/newUserSubmit/NewUserSubmit';
-import Admin from './pages/admin/Admin';
 import TempSuspend from './pages/tempSuspend/TempSuspend';
 import FormSubmitted from './pages/formSubmitted/FormSubmitted';
-import UserForm from './pages/userForm/UserForm';
+import AddAccount from './pages/addAccount/AddAccount';
 import AccountList from './pages/accountList/AccountList';
 import logo from './img/logo.svg';
 import ChartOfAccounts from './pages/chartOfAccounts/ChartOfAccounts';
@@ -26,21 +25,18 @@ function App() {
   const [username, setUsername] = useState('');
 
   // Use useEffect to check if the user is logged in when the component mounts
+  
   useEffect(() => {
-    // Make a request to your server to check if the user is logged in
     Axios.get('http://localhost:3001')
       .then((res) => {
         if (res.data.valid) {
-          setIsLoggedIn(true);
-          setUsername(res.data.username);
-        } else {
-          setIsLoggedIn(false);
+          setUsername(res.headers['x-username']); // Extract username from the header
         }
       })
       .catch((err) => {
-        console.error('Error checking user login status:', err);
+        console.error('Error fetching username:', err);
       });
-  }, []);
+  });
 
   return (
     <Router>
@@ -85,9 +81,8 @@ function App() {
         <Route path="/forgotPassword" element={<ForgotPassword />} />
         <Route path="/newUserSubmit" element={<NewUserSubmit />} />
         <Route path="/tempSuspend" element={<TempSuspend />} />
-        <Route path="/admin" element={<Admin />} />
         <Route path="/formSubmitted" element={<FormSubmitted />} />
-        <Route path="/userForm" element={<UserForm />} />
+        <Route path="/addAccount" element={<AddAccount />} />
         <Route path="/accountList" element={<AccountList />} />
         <Route path="/chartOfAccounts" element={<ChartOfAccounts />} />
         <Route path="/journal" element={<Journal />} />
