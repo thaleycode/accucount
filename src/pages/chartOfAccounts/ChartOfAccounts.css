@@ -88,3 +88,14 @@
   margin-right: 10px;
   width: 45%;
 }
+
+.bottom-button {
+
+  display: flex;
+  width: 80%;
+  padding: 20px;
+}
+
+.left-button {
+  text-align: left;
+}

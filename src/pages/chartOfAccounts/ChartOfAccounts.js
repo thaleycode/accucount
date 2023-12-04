@@ -97,11 +97,6 @@ function ChartOfAccounts() {
           <option value="expense">Expense</option>
         </select>
 
-        <select value={selectedSubcategory} onChange={handleSubcategoryChange}>
-          <option value="">All Subcategories</option>
-          {/* Add options for subcategories */}
-        </select>
-
         <select value={selectedAmount} onChange={handleAmountChange}>
           <option value="">All Amounts</option>
           <option value="5000">$5,000+</option>
@@ -156,6 +151,9 @@ function ChartOfAccounts() {
             ))}
           </tbody>
         </table>
+        <div className="bottom-button">
+          <div className="left-button"><Link to="/addAccount"><button className="add-account-button">+ Add new account</button></Link></div>
+        </div>
       </div>
     </div>
   );
