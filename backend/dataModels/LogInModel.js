@@ -1,3 +1,5 @@
+//schema for login information
+
 const mongoose = require('mongoose');
 
 const LogInSchema = new mongoose.Schema({
@@ -8,7 +10,12 @@ const LogInSchema = new mongoose.Schema({
     active: {type: Boolean, default: true},
     deactivateDate: Date,
     reactivateDate: Date,
-    role: { type: String, default: "user" }
+    role: { type: String, default: "user" },
+    pastPasswords: [{
+        type: String,
+    }],
+    securityQuestion1: String,
+    securityQuestion2: String,
 });
 
 const LogInModel = mongoose.model("logInInfo", LogInSchema);
