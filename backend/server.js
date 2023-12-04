@@ -2,18 +2,25 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const uri = require('./atlas_uri');
+
 const UserModel = require('./dataModels/UserInfoModel');
 const LogInModel = require('./dataModels/LogInModel');
-const ResetPasswordsModel = require('./dataModels/ResetPasswordsModel');
+const AcctModel = require('./dataModels/AcctModel')
+const JournalEntryModel = require('./dataModels/JournalEntryModel');
+
 const bcrypt = require('bcrypt');
 const session = require('express-session');
 const cookie = require('cookie-parser');
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 
+const multer = require('multer'); // Import and prepare multer for file uploads
+const path = require('path');
+
 const app = express();
 const port = 3001
 //#############################do not post info to github
+//#########couldn't get to work
 const transporter = nodemailer.createTransport({
   service: '######', // e.g., 'Gmail', 'Outlook'
   auth: {
@@ -22,6 +29,17 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+const isAccountNumberDuplicate = async (accountNumber) => {
+  const existingAccount = await AcctModel.findOne({ number: accountNumber });
+  return existingAccount !== null;
+};
+
+const isAccountNameDuplicate = async (accountName) => {
+  const existingAccount = await AcctModel.findOne({ name: accountName });
+  return existingAccount !== null;
+};
+
+//cookies set up for username - couldnt work
 app.use(cors({
     origin: ["http://localhost:3000"],
     methods: ["POST", "GET"],
@@ -46,6 +64,42 @@ mongoose.connect(uri, {
     useNewUrlParser:true,
     useUnifiedTopology:true,
 });
+
+app.use((req, res, next) => {
+  if (req.session.username) {
+    res.setHeader('X-Username', req.session.username);
+  }
+  next();
+});
+
+//
+//multer file save setup
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    // Set the destination folder where files will be saved
+    cb(null, 'uploads/');
+  },
+  filename: function (req, file, cb) {
+    // Rename the uploaded file if needed
+    const extname = path.extname(file.originalname);
+    cb(null, Date.now() + extname);
+  },
+});
+
+// Create const with storage configuration
+const upload = multer({ storage });
+
+// Define a route to handle file uploads
+app.post('/upload-file', upload.single('file'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: 'No file uploaded' });
+  }
+
+  // File has been uploaded and saved to the server
+  const fileName = req.file.filename; // Get the name of the saved file
+  res.status(200).json({ message: 'File uploaded successfully', fileName });
+});
+
 
 //APIs
 
@@ -88,33 +142,41 @@ app.get('/', (req, res) => {
 //add user information when account is created
 
 //login to site
-app.post('/login/', (req,res) => {
-    const {username, password} = req.body;
-    LogInModel.findOne({username: username})
-    .then (user => {
-        if (user) {
-            bcrypt.compare(password, user.password, (err, response) => {
-                if (err) {
-                    return res.json("Incorrect password")
-            }
-                if (response) {
-                    req.session.username = user.username;
-                    req.session.role = user.role;
-                    console.log(req.session.username);
-                    res.json({info: "Logged in", username: req.session.username})
-                }
-            })
-        } else {
-            res.json("No record exists")
-        }
+app.post('/login/', (req, res) => {
+  const { username, password } = req.body;
 
+  LogInModel.findOne({ username: username })
+    .then((user) => {
+      if (user) {
+        bcrypt.compare(password, user.password, (err, response) => {
+          if (err) {
+            // Handle bcrypt error
+            return res.json({ info: "Login failed: Incorrect password" });
+          }
+          if (response) {
+            req.session.username = user.username;
+            req.session.role = user.role;
+            console.log(req.session.username);
+            res.json({ info: "Logged in", username: req.session.username });
+          } else {
+            // Incorrect password
+            res.json({ info: "Login failed: Incorrect password" });
+          }
+        });
+      } else {
+        // User not found
+        res.json({ info: "Login failed: User not found" });
+      }
     })
-    
-})
+    .catch((error) => {
+      console.error("Error:", error);
+      res.status(500).json({ error: "An error occurred while logging in" });
+    });
+});
 
 //sumbit new user login info
 app.post('/login/add', (req, res) => {
-    const {username, email, password, passwordExpiry, active, deactivateDate, reactivateDate} = req.body
+    const {username, email, password, passwordExpiry, active, deactivateDate, reactivateDate, securityQuestion1, securityQuestion2} = req.body
     bcrypt.hash(password, 10)
         .then(hash => {
 
@@ -123,56 +185,27 @@ app.post('/login/add', (req, res) => {
             console.log(`Login Information>>>>>>>`, loginInfo)
             console.log('hash: ' + hash )
         
-            LogInModel.create({ username, email, password: hash, passwordExpiry, active, deactivateDate, reactivateDate })
+            LogInModel.create({ username, email, password: hash, passwordExpiry, active, deactivateDate, reactivateDate, securityQuestion1, securityQuestion2 })
         
-                /* #####couldn't get email to work
-                .then(newUser => {
-                    const mailOptions = {
-                        from: 'AccucountMailer@gmail.com', // From Accucount mailer account
-                        to: 'AccucountadmTest@gmail.com', // Send to default admin
-                        subject: 'New User Registration',
-                        text: `A new user with username ${username} has registered on your website. Please go to the user management page at <a href="http://localhost:3000/usermanagement">Accucount</a> to activate the account.`,
-                    };
+        .then(() => {
+          // Handle successful creation
+          res.json({ message: 'User registration successful' });
+          })
+        .catch(error => {
+          console.error('Error creating user:', error);
+          res.status(500).json('Error creating user');
+        });
+    });
+});
+            
 
-                    transporter.sendMail(mailOptions, (error, info) => {
-                        if (error) {
-                        console.error('Error sending email:', error);
-                        res.status(500).json('Error sending email');
-                        } else {
-                        console.log('Email sent:', info.response);
-                        res.json('User registration successful');
-                        }
-                    });
-                    })
-                    .catch(error => {
-                    console.error('Error creating user:', error);
-                    res.status(500).json('Error creating user');
-                    });*/
-        });        
-})
-
-//submit new user personal in
+//submit new user personal info
 app.post('/user/add', (req, res) => {
     const userInfo = req.body;
     console.log(`User Information>>>>>>>`, userInfo); 
 
     UserModel.create(userInfo);
 })
-
-//submit security questions and start the reset password entry for the new user
-app.post('/security-questions', (req, res) => {
-  const { username, securityQuestion1, securityQuestion2 } = req.body;
-
-  // Submit ResetPasswordsModel collection
-  ResetPasswordsModel.create({ username, securityQuestion1, securityQuestion2 })
-    .then((document) => {
-      res.json({ message: 'Security questions saved successfully' });
-    })
-    .catch((error) => {
-      console.error('Error saving security questions:', error);
-      res.status(500).json({ error: 'Failed to save security questions' });
-    });
-});
 
 //deactivate account after 3 failed attempts
 app.post('/deactivate-account', (req, res) => {
@@ -218,9 +251,25 @@ app.post('/update-users', async (req, res) => {
   }
 });
 
+// Api to submit journal entries
+app.post('/submit-journal-entry', async (req, res) => {
+  try {
+    const { journalEntry } = req.body;
+
+    // Save journal entry to database
+    await JournalEntryModel.create(journalEntry);
+
+    res.status(200).json({ message: 'Journal entry submitted successfully.' });
+  } catch (error) {
+    console.error('Error submitting journal entry:', error);
+    res.status(500).json({ error: 'Failed to submit journal entry.' });
+  }
+});
 
 
-////get info from MongoDb
+
+
+////get user info from MongoDb
 app.get('/users', (req, res) => {
   LogInModel.find({})
     .then((users) => {
@@ -230,6 +279,73 @@ app.get('/users', (req, res) => {
       console.error('Error fetching user data:', err);
       res.status(500).json({ error: 'Failed to fetch user data' });
     });
+});
+
+//get accounts for journal.js dropdown options
+app.get('/api/accounts', async (req, res) => {
+  const { normalSide } = req.query;
+  try {
+    const accounts = await AcctModel.find({ normalSide });
+    res.json(accounts);
+  } catch (error) {
+    console.error('Error fetching accounts:', error);
+    res.status(500).json({ error: 'Failed to fetch accounts' });
+  }
+});
+
+//add accounts to mongodb 
+app.post('/account/add', async (req, res) => {
+  const {
+    accountCategory,
+    accountNumber,
+    accountName,
+    balance,
+    comment,
+  } = req.body;
+
+  const createdBy = "";
+  const dateTimeAdded = new Date();
+
+  // Check for duplicate account number and name (you can reuse your existing functions)
+  const isDuplicateNumber = await isAccountNumberDuplicate(accountNumber);
+  const isDuplicateName = await isAccountNameDuplicate(accountName);
+
+  if (isDuplicateNumber || isDuplicateName) {
+    return res.status(400).json({ error: 'Account number or name already exists' });
+  }
+
+  let normalSide = '';
+
+  if (accountCategory === 'equity' || accountCategory === 'liability' || accountCategory === 'income') {
+    normalSide = 'Credit';
+  } else if (accountCategory === 'asset' || accountCategory === 'expenses') {
+    normalSide = 'Debit';
+  }
+
+  // Create a new account
+  const newAccount = new AcctModel({
+    category: accountCategory,
+    number: accountNumber,
+    name: accountName,
+    normalSide: normalSide,
+    balance: balance,
+    dateTimeAdded: dateTimeAdded,
+    createdBy: createdBy,
+    comment: comment,
+  });
+
+  try {
+    await newAccount.save();
+    return res.status(201).json({ message: 'Account created successfully' });
+  } catch (error) {
+    console.error('Error creating account:', error);
+    return res.status(500).json({ error: 'Failed to create account' });
+  }
+});
+
+
+app.post('/test', (req, res) => {
+  res.json({ message: 'This is a temporary test route.' });
 });
 
 app.listen(port, () => console.log("listening on port ", port));
