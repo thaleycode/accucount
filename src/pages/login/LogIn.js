@@ -37,7 +37,7 @@ export default function LogIn() {
     // Make an API call to deactivate the user's account
     Axios.post("/deactivate-account", { username })
       .then((result) => {
-        // Handle the result, e.g., show a message to the user
+        
       })
       .catch((error) => {
         alert("Failed to deactivate account: " + error.message);
