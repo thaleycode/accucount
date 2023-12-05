@@ -12,7 +12,10 @@ const JournalEntrySchema = new mongoose.Schema({
     comments: String,
     filePath: String, //location on server
     user: String,
-    submitDate: Date
+    submitDate: {
+        type: Date,
+        default: Date.now, // Set to the current date and time
+    },
 });
 
 const JournalEntryModel = mongoose.model("pendingJournalEntry", JournalEntrySchema);

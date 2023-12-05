@@ -280,7 +280,8 @@ app.post('/submit-journal-entry', async (req, res) => {
 
 
 
-////get user info from MongoDb
+////Apis to get info
+//check users for logins
 app.get('/users', (req, res) => {
   LogInModel.find({})
     .then((users) => {
@@ -354,6 +355,16 @@ app.post('/account/add', async (req, res) => {
   }
 });
 
+app.get('/api/pending-journal-entries', (req, res) => {
+  JournalEntryModel.find({})
+    .then((entries) => {
+      res.json(entries);
+    })
+    .catch((error) => {
+      console.error('Error fetching pending journal entries:', error);
+      res.status(500).json({ error: 'Failed to fetch pending journal entries' });
+    });
+});
 
 app.post('/test', (req, res) => {
   res.json({ message: 'This is a temporary test route.' });
