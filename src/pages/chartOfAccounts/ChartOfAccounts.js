@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './ChartOfAccounts.css';
 import { NavLink, Link } from 'react-router-dom';
-
 
 function ChartOfAccounts() {
   const [searchString, setSearchString] = useState('');
@@ -9,31 +8,30 @@ function ChartOfAccounts() {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedSubcategory, setSelectedSubcategory] = useState('');
   const [selectedAmount, setSelectedAmount] = useState('');
+  const [accounts, setAccounts] = useState([]);
 
+  useEffect(() => {
+    // Fetch data from MongoDB API endpoint when the component mounts
+    fetch('http://localhost:3001/accounts')
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setAccounts(data);
+      })
+      .catch((error) => {
+        console.error('Error fetching accounts:', error);
+      });
+  }, []);
 
-  const databaseEntries = [
-    { number: 1001, name: "Cash", category: "Asset", financialStatement: "Balance Sheet", balance: "$51,822.76" },
-    { number: 1002, name: "Accounts Receivable", category: "Asset", financialStatement: "Balance Sheet", balance: "$1,584.33" },
-    { number: 1003, name: "Inventory", category: "Asset", financialStatement: "Balance Sheet", balance: "$35,442.43" },
-    { number: 2001, name: "Accounts Payable", category: "Liability", financialStatement: "Balance Sheet", balance: "$2,434.85" },
-    { number: 2201, name: "Payroll Tax", category: "Liability", financialStatement: "Balance Sheet", balance: "$875.15" },
-    { number: 3001, name: "Common Stock", category: "Equity", financialStatement: "Balance Sheet", balance: "$15,222.36" },
-    { number: 3800, name: "Retained Earnings", category: "Equity", financialStatement: "Balance Sheet", balance: "$1,875.78" },
-    { number: 5001, name: "Product Sales", category: "Income", financialStatement: "Income Statement", balance: "$45,115.70" },
-    { number: 5200, name: "Earned Interest", category: "Income", financialStatement: "Income Statement", balance: "$9,344.09" },
-    { number: 7001, name: "Payroll", category: "Expenses", financialStatement: "Income Statement", balance: "$9,662.33" },
-    { number: 7050, name: "Rent", category: "Expenses", financialStatement: "Income Statement", balance: "$13,315.44" },
-  ];
-
-  const filterEntries = databaseEntries.filter((account) =>
-    (searchString === '' || 
-    (account.number.toString().includes(searchString) ||
-    account.name.toLowerCase().includes(searchString.toLowerCase()))) &&
+  const filterEntries = accounts.filter((account) =>
+    (searchString === '' ||
+      (account.number.toString().includes(searchString) ||
+        account.name.toLowerCase().includes(searchString.toLowerCase()))) &&
     (selectedAccountNumber === '' || account.number.toString() === selectedAccountNumber) &&
     (selectedCategory === '' || account.category === selectedCategory) &&
     (selectedSubcategory === '' || account.subcategory === selectedSubcategory) &&
     (selectedAmount === '' || parseFloat(account.balance.replace('$', '').replace(',', '')) >= parseFloat(selectedAmount))
-);
+  );
 
   const handleSearchInput = (event) => {
     setSearchString(event.target.value);
@@ -59,7 +57,9 @@ function ChartOfAccounts() {
     <div>
       <div className="top-links">
         <NavLink to="/">Home</NavLink>
-        <NavLink to="/chartOfAccounts" activeClassName="active">Chart of Accounts</NavLink>
+        <NavLink to="/chartOfAccounts" activeClassName="active">
+          Chart of Accounts
+        </NavLink>
         <NavLink to="/journal">Journal Entries</NavLink>
         <NavLink to="/generateReports">Generate Reports</NavLink>
         <NavLink to="/userManagement">User Management</NavLink>
@@ -67,7 +67,16 @@ function ChartOfAccounts() {
       <h1>Chart Of Accounts</h1>
       <br></br>
       <br></br>
-      <div className="search-filter-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50px', padding: '5px' }}>
+      <div
+        className="search-filter-container"
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '50px',
+          padding: '5px',
+        }}
+      >
         <input
           type="text"
           placeholder="Filter by account number or account name"
@@ -152,7 +161,11 @@ function ChartOfAccounts() {
           </tbody>
         </table>
         <div className="bottom-button">
-          <div className="left-button"><Link to="/addAccount"><button className="add-account-button">+ Add new account</button></Link></div>
+          <div className="left-button">
+            <Link to="/addAccount">
+              <button className="add-account-button">+ Add new account</button>
+            </Link>
+          </div>
         </div>
       </div>
     </div>
