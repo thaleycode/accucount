@@ -96,7 +96,31 @@ function Journal() {
 
 const handleSubmit = async () => {
   try {
-    // Create a FormData object to send the file
+    // Variables to track total debit and credit amounts
+    let totalDebit = 0;
+    let totalCredit = 0;
+
+    // Loop through all rows in journalData and calculate total debit and credit amounts
+    for (const row of journalData) {
+      const debitAmount = parseFloat(row.debitAmount);
+      const creditAmount = parseFloat(row.creditAmount);
+
+      if (!isNaN(debitAmount)) {
+        totalDebit += debitAmount;
+      }
+
+      if (!isNaN(creditAmount)) {
+        totalCredit += creditAmount;
+      }
+    }
+
+    // Check if total debit and total credit amounts are equal
+    if (totalDebit !== totalCredit) {
+      alert('Debit and credit amounts are not equal. Please balance the transaction.');
+      return; // Prevent further submission
+    }
+
+    // If the amounts match, proceed with file upload and journal entry submission
     const formData = new FormData();
     formData.append('file', selectedDocument);
 
@@ -139,12 +163,10 @@ const handleSubmit = async () => {
         transAmt: transAmt,
         comments: document.querySelector('.comment').value,
         filePath: fileName, // Info from server submission
-        user: '', 
+        user: '',
         submitDateTime: new Date(),
         transNumber: 1, // Needs to be made
       };
-
-      console.log(fileResponse.fileName)
 
       // Send the data to the server for MongoDB insertion
       const response = await fetch('http://localhost:3001/submit-journal-entry', {
