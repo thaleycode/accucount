@@ -71,7 +71,7 @@ function ChartOfAccounts() {
       default:
         // Default case if no range is selected
         lowerBound = 0;
-        upperBound = 50000;
+        upperBound = 10000;
         break;
     }
 
