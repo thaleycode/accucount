@@ -59,6 +59,10 @@
   color: black;
   display: block;
 }
+.my-table td a {
+  text-decoration: none;
+  color: inherit;
+}
 .my-table th, .my-table td {
   border: none;
   padding: 8px;

@@ -6,7 +6,6 @@ function ChartOfAccounts() {
   const [searchString, setSearchString] = useState('');
   const [selectedAccountNumber, setSelectedAccountNumber] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [selectedSubcategory, setSelectedSubcategory] = useState('');
   const [selectedAmount, setSelectedAmount] = useState('');
   const [accounts, setAccounts] = useState([]);
 
@@ -23,15 +22,71 @@ function ChartOfAccounts() {
       });
   }, []);
 
-  const filterEntries = accounts.filter((account) =>
-    (searchString === '' ||
-      (account.number.toString().includes(searchString) ||
-        account.name.toLowerCase().includes(searchString.toLowerCase()))) &&
-    (selectedAccountNumber === '' || account.number.toString() === selectedAccountNumber) &&
-    (selectedCategory === '' || account.category === selectedCategory) &&
-    (selectedSubcategory === '' || account.subcategory === selectedSubcategory) &&
-    (selectedAmount === '' || parseFloat(account.balance.replace('$', '').replace(',', '')) >= parseFloat(selectedAmount))
-  );
+  
+ const filterEntries = accounts.filter((account) => {
+  const accountNumber = parseInt(account.number);
+
+  // Check if the account number is valid (a number) and within the selected range
+  if (!isNaN(accountNumber)) {
+    let lowerBound, upperBound;
+
+    // Use a switch statement to set the bounds based on the selected account number
+    switch (selectedAccountNumber) {
+      case "1000s":
+        lowerBound = 1000;
+        upperBound = 1999;
+        break;
+      case "2000s":
+        lowerBound = 2000;
+        upperBound = 2999;
+        break;
+      case "3000s":
+        lowerBound = 3000;
+        upperBound = 3999;
+        break;
+      case "4000s":
+        lowerBound = 4000;
+        upperBound = 4999;
+        break;
+      case "5000s":
+        lowerBound = 5000;
+        upperBound = 5999;
+        break;
+      case "6000s":
+        lowerBound = 6000;
+        upperBound = 6999;
+        break;
+      case "7000s":
+        lowerBound = 7000;
+        upperBound = 7999;
+        break;
+      case "8000s":
+        lowerBound = 8000;
+        upperBound = 8999;
+        break;
+      case "9000s":
+        lowerBound = 9000;
+        upperBound = 9999;
+        break;
+      default:
+        // Default case if no range is selected
+        lowerBound = 0;
+        upperBound = 50000;
+        break;
+    }
+
+    return (
+      (searchString === '' ||
+        (account.number.toString().includes(searchString) ||
+          account.name.toLowerCase().includes(searchString.toLowerCase()))) &&
+      (accountNumber >= lowerBound && accountNumber <= upperBound) &&
+      (selectedCategory === '' || account.category === selectedCategory) &&
+      (selectedAmount === '' || parseFloat(account.balance.replace('$', '').replace(',', '')) >= parseFloat(selectedAmount))
+    );
+  }
+
+  return false;
+ });
 
   const handleSearchInput = (event) => {
     setSearchString(event.target.value);
@@ -43,10 +98,6 @@ function ChartOfAccounts() {
 
   const handleCategoryChange = (event) => {
     setSelectedCategory(event.target.value);
-  };
-
-  const handleSubcategoryChange = (event) => {
-    setSelectedSubcategory(event.target.value);
   };
 
   const handleAmountChange = (event) => {
@@ -143,7 +194,7 @@ function ChartOfAccounts() {
                 </td>
                 <td>
                   <Link to={`/account/${account.number}`}>
-                    {account.category}
+                    {account.category.charAt(0).toUpperCase() + account.category.slice(1)}
                   </Link>
                 </td>
                 <td>
