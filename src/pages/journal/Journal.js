@@ -15,7 +15,7 @@ function Journal() {
 
   const [debitAccounts, setDebitAccounts] = useState([]);
   const [creditAccounts, setCreditAccounts] = useState([]);
-  const [selectedDocument, setSelectedDocument] = useState(null);
+  const [selectedDocument, setSelectedDocument] = useState(null); // Allow null for optional file submission
 
   useEffect(() => {
     // Fetch debit accounts data
@@ -94,45 +94,33 @@ function Journal() {
     }
   };
 
-const handleSubmit = async () => {
-  try {
-    // Variables to track total debit and credit amounts
-    let totalDebit = 0;
-    let totalCredit = 0;
+  const handleSubmit = async () => {
+    try {
+      // Variables to track total debit and credit amounts
+      let totalDebit = 0;
+      let totalCredit = 0;
 
-    // Loop through all rows in journalData and calculate total debit and credit amounts
-    for (const row of journalData) {
-      const debitAmount = parseFloat(row.debitAmount);
-      const creditAmount = parseFloat(row.creditAmount);
+      // Loop through all rows in journalData and calculate total debit and credit amounts
+      for (const row of journalData) {
+        const debitAmount = parseFloat(row.debitAmount);
+        const creditAmount = parseFloat(row.creditAmount);
 
-      if (!isNaN(debitAmount)) {
-        totalDebit += debitAmount;
+        if (!isNaN(debitAmount)) {
+          totalDebit += debitAmount;
+        }
+
+        if (!isNaN(creditAmount)) {
+          totalCredit += creditAmount;
+        }
       }
 
-      if (!isNaN(creditAmount)) {
-        totalCredit += creditAmount;
+      // Check if total debit and total credit amounts are equal
+      if (totalDebit !== totalCredit) {
+        alert('Debit and credit amounts are not equal. Please balance the transaction.');
+        return; // Prevent further submission
       }
-    }
 
-    // Check if total debit and total credit amounts are equal
-    if (totalDebit !== totalCredit) {
-      alert('Debit and credit amounts are not equal. Please balance the transaction.');
-      return; // Prevent further submission
-    }
-
-    // If the amounts match, proceed with file upload and journal entry submission
-    const formData = new FormData();
-    formData.append('file', selectedDocument);
-
-    // Send the file to the server for upload
-    const fileResponse = await fetch('http://localhost:3001/upload-file', {
-      method: 'POST',
-      body: formData,
-    });
-
-    if (fileResponse.status === 200) {
-      // File upload succeeded, continue with journal entry submission
-      const { fileName } = await fileResponse.json();
+      // If the amounts match, proceed with journal entry submission (with optional file)
       const transAmt = [];
 
       // Loop through all rows in journalData and add them to transAmt array
@@ -162,7 +150,7 @@ const handleSubmit = async () => {
         transDate: journalData[0].date,
         transAmt: transAmt,
         comments: document.querySelector('.comment').value,
-        filePath: fileName, // Info from server submission
+        filePath: selectedDocument ? selectedDocument.name : '', // Optional file attachment
         user: '',
         submitDateTime: new Date(),
         transNumber: 1, // Needs to be made
@@ -191,18 +179,16 @@ const handleSubmit = async () => {
             creditAmount: '',
           }))
         );
+        handleClear();
         document.querySelector('.comment').value = '';
         alert('Journal entry submitted successfully.');
       } else {
         alert('Failed to submit journal entry.');
       }
-    } else {
-      alert('Failed to upload the file.');
+    } catch (error) {
+      console.error('Error submitting journal entry:', error);
     }
-  } catch (error) {
-    console.error('Error submitting journal entry:', error);
-  }
-};
+  };
 
 
   return (
