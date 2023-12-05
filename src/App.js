@@ -17,7 +17,7 @@ import GenerateReports from './pages/generateReports/GenerateReports';
 import Journal from './pages/journal/Journal';
 import Reports from './pages/reports/Reports';
 import UserManagement from './pages/userManagement/UserManagement';
-import AccountDetails from './components/AccountDetails';
+import AccountDetails from './pages/accountDetails/AccountDetails';
 import Axios from 'axios';
 
 function App() {
@@ -84,12 +84,12 @@ function App() {
         <Route path="/formSubmitted" element={<FormSubmitted />} />
         <Route path="/addAccount" element={<AddAccount />} />
         <Route path="/accountList" element={<AccountList />} />
+        <Route path="/account/:accountNumber" element={<AccountDetails />} />
         <Route path="/chartOfAccounts" element={<ChartOfAccounts />} />
         <Route path="/journal" element={<Journal />} />
         <Route path="/generateReports" element={<GenerateReports />} />
         <Route path="/reports" element={<Reports />} />
         <Route path="/userManagement" element={<UserManagement />} />
-        <Route path="/account/:accountNumber" component={<AccountDetails />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
     </Router>
