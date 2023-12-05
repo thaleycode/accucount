@@ -135,6 +135,17 @@ app.get('/', (req, res) => {
   }
 });
 
+//get all acct info from database
+app.get('/accounts', async (req, res) => {
+  try {
+    const accounts = await AcctModel.find();
+    res.json(accounts);
+  } catch (error) {
+    console.error('Error fetching accounts:', error);
+    res.status(500).json({ error: 'Failed to fetch accounts' });
+  }
+});
+
 
 
 //post to MongoDB
