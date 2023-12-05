@@ -20,5 +20,5 @@ const JournalEntrySchema = new mongoose.Schema({
     denyComment: String
 });
 
-const JournalEntryModel = mongoose.model("pendingJournalEntry", JournalEntrySchema);
+const JournalEntryModel = mongoose.model("journalEntry", JournalEntrySchema);
 module.exports = JournalEntryModel;
