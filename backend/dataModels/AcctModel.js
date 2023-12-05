@@ -9,19 +9,7 @@ const AcctSchema = new mongoose.Schema({
     normalSide: String,
     balance: Number,
     journals: [{
-        transDate: Date,
-        transNumber: Number,
-        transAmt: [{
-            account: Number,
-            side: String,
-            amount: Number,
-        }],
-        comments: String,
-        filePath: String, //location on server
-        user: String,
-        submitDate: {
-            type: Date,
-        }
+        number: Number
     }],
     dateTimeAdded: { type: Date, default: Date.now,},
     createdBy: String,

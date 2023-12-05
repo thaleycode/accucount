@@ -146,6 +146,43 @@ app.get('/accounts', async (req, res) => {
   }
 });
 
+//search by acct num
+app.get('/account/:accountNumber', async (req, res) => {
+  const { accountNumber } = req.params;
+
+  try {
+    // Fetch the account details from the database based on the accountNumber
+    const account = await AcctModel.findOne({ number: accountNumber });
+
+    if (!account) {
+      return res.status(404).json({ error: 'Account not found' });
+    }
+
+    res.json(account);
+  } catch (error) {
+    console.error('Error fetching account details:', error);
+    res.status(500).json({ error: 'Failed to fetch account details' });
+  }
+});
+
+//search journal entries by acct num
+app.get('/journalEntries/:accountNumber', async (req, res) => {
+  const { accountNumber } = req.params;
+
+  try {
+    // get entries where transAmt array contains the desired account number
+    // and the status is "approved"
+    const journalEntries = await JournalEntryModel.find({
+      'transAmt.account': accountNumber,
+      status: 'approved',
+    });
+
+    res.json(journalEntries);
+  } catch (error) {
+    console.error('Error fetching approved journal entries:', error);
+    res.status(500).json({ error: 'Failed to fetch approved journal entries' });
+  }
+});
 
 
 //post to MongoDB

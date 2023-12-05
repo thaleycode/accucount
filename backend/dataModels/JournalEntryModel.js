@@ -16,6 +16,8 @@ const JournalEntrySchema = new mongoose.Schema({
         type: Date,
         default: Date.now, // Set to the current date and time
     },
+    status: { type: String, default: "pending" },
+    denyComment: String
 });
 
 const JournalEntryModel = mongoose.model("pendingJournalEntry", JournalEntrySchema);
