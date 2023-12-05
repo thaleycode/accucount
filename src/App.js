@@ -14,7 +14,7 @@ import AccountList from './pages/accountList/AccountList';
 import logo from './img/logo.svg';
 import ChartOfAccounts from './pages/chartOfAccounts/ChartOfAccounts';
 import GenerateReports from './pages/generateReports/GenerateReports';
-import Journal from './pages/journal/Journal';
+import Journalize from './pages/journalize/Journalize';
 import Reports from './pages/reports/Reports';
 import UserManagement from './pages/userManagement/UserManagement';
 import AccountDetails from './pages/accountDetails/AccountDetails';
@@ -88,7 +88,7 @@ function App() {
         <Route path="/accountList" element={<AccountList />} />
         <Route path="/account/:accountNumber" element={<AccountDetails />} />
         <Route path="/chartOfAccounts" element={<ChartOfAccounts />} />
-        <Route path="/journal" element={<Journal />} />
+        <Route path="/journalize" element={<Journalize />} />
         <Route path="/generateReports" element={<GenerateReports />} />
         <Route path="/reports" element={<Reports />} />
         <Route path="/userManagement" element={<UserManagement />} />

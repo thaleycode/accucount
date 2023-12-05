@@ -8,6 +8,7 @@ function AccountDetails() {
 
   // Define state and useEffect for fetching journal entries related to the account
   const [journalEntries, setJournalEntries] = useState([]);
+  
 
   useEffect(() => {
     // Fetch account details for the specific account using accountNumber
@@ -92,7 +93,7 @@ function AccountDetails() {
         <NavLink to="/chartOfAccounts" activeClassName="active">
           Chart of Accounts
         </NavLink>
-        <NavLink to="/journal">Journal Entries</NavLink>
+        <NavLink to="/journalize">Journalize</NavLink>
         <NavLink to="/generateReports">Generate Reports</NavLink>
         <NavLink to="/userManagement">User Management</NavLink>
       </div>

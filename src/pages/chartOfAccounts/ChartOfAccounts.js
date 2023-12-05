@@ -111,7 +111,7 @@ function ChartOfAccounts() {
         <NavLink to="/chartOfAccounts" activeClassName="active">
           Chart of Accounts
         </NavLink>
-        <NavLink to="/journal">Journal Entries</NavLink>
+        <NavLink to="/journalize">Journalize</NavLink>
         <NavLink to="/generateReports">Generate Reports</NavLink>
         <NavLink to="/userManagement">User Management</NavLink>
       </div>
