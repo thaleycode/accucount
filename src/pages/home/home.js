@@ -90,11 +90,19 @@ function Home(){
       });
   }, []);
 
+ function formatDate(dateString) {
+    const date = new Date(dateString);
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const year = date.getFullYear();
+    return `${month}/${day}/${year}`;
+  }
+
   const renderPendingJournalEntry = (entry) => (
     <tr key={entry.transNumber}>
-      <td>{entry.submitDate}</td>
+      <td>{formatDate(entry.submitDate)}</td>
       <td>{entry.transNumber}</td>
-      <td>{entry.transDate}</td>
+      <td>{formatDate(entry.transDate)}</td>
       <td>{entry.user}</td>
       <td>
         <button className="view-button">View</button>
@@ -102,6 +110,7 @@ function Home(){
     </tr>
   );
 
+ 
   return (
     <div style={{ marginBottom: '50px' }}>
       <div className="top-links">
