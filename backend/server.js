@@ -332,9 +332,8 @@ app.get('/users', (req, res) => {
 
 //get accounts for journal.js dropdown options
 app.get('/api/accounts', async (req, res) => {
-  const { normalSide } = req.query;
   try {
-    const accounts = await AcctModel.find({ normalSide });
+    const accounts = await AcctModel.find();
     res.json(accounts);
   } catch (error) {
     console.error('Error fetching accounts:', error);

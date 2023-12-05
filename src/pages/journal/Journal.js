@@ -13,36 +13,22 @@ function Journal() {
     },
   ]);
 
-  const [debitAccounts, setDebitAccounts] = useState([]);
-  const [creditAccounts, setCreditAccounts] = useState([]);
+  const [accounts, setAccounts] = useState([]);
   const [selectedDocument, setSelectedDocument] = useState(null); // Allow null for optional file submission
 
   useEffect(() => {
-    // Fetch debit accounts data
-    fetch('http://localhost:3001/api/accounts?normalSide=Debit')
+    // Fetch all accounts data
+    fetch('http://localhost:3001/api/accounts')
       .then((response) => response.json())
       .then((data) => {
-        const debitAccountsData = data.map((account) => ({
+        const accountsData = data.map((account) => ({
           number: account.number,
           name: account.name,
         }));
-        setDebitAccounts(debitAccountsData);
+        console.log(accountsData)
+        setAccounts(accountsData);
       })
-      .catch((error) => console.error('Error fetching debit accounts:', error));
-  }, []);
-
-  useEffect(() => {
-    // Fetch credit accounts data
-    fetch('http://localhost:3001/api/accounts?normalSide=Credit')
-      .then((response) => response.json())
-      .then((data) => {
-        const creditAccountsData = data.map((account) => ({
-          number: account.number,
-          name: account.name,
-        }));
-        setCreditAccounts(creditAccountsData);
-      })
-      .catch((error) => console.error('Error fetching credit accounts:', error));
+      .catch((error) => console.error('Error fetching accounts:', error));
   }, []);
 
   const handleAddRow = () => {
@@ -233,7 +219,7 @@ function Journal() {
                     style={{ width: '100%' }}
                   >
                     <option value=""></option>
-                    {debitAccounts.map((account) => (
+                    {accounts.map((account) => (
                       <option key={account.number} value={account.number}>
                         {`${account.number} ${account.name}`}
                       </option>
@@ -244,9 +230,10 @@ function Journal() {
                     value={row.account1}
                     onChange={(e) => handleSelectChange(index, 'account1', e.target.value)}
                     style={{ width: '100%' }}
+                    disabled={row.account2 !== ''}
                   >
                     <option value=""></option>
-                    {debitAccounts.concat(creditAccounts).map((account) => (
+                    {accounts.map((account) => (
                       <option key={account.number} value={account.number}>
                         {`${account.number} ${account.name}`}
                       </option>
@@ -263,7 +250,7 @@ function Journal() {
                     disabled={row.account1 !== ''}
                   >
                     <option value=""></option>
-                    {creditAccounts.map((account) => (
+                    {accounts.map((account) => (
                       <option key={account.number} value={account.number}>
                         {`${account.number} ${account.name}`}
                       </option>
@@ -274,9 +261,10 @@ function Journal() {
                     value={row.account2}
                     onChange={(e) => handleSelectChange(index, 'account2', e.target.value)}
                     style={{ width: '100%' }}
+                    disabled={row.account1 !== ''}
                   >
                     <option value=""></option>
-                    {debitAccounts.concat(creditAccounts).map((account) => (
+                    {accounts.map((account) => (
                       <option key={account.number} value={account.number}>
                         {`${account.number} ${account.name}`}
                       </option>
@@ -315,7 +303,7 @@ function Journal() {
                     min="0"
                     style={{ width: '100%' }}
                     inputMode="numeric"
-                    disabled={row.account1 !== ''}
+                    disabled={true}
                   />
                 ) : (
                   <input
@@ -325,12 +313,14 @@ function Journal() {
                     min="0"
                     style={{ width: '100%' }}
                     inputMode="numeric"
+                    disabled={row.account1 !== ''}
                   />
                 )}
               </td>
             </tr>
           ))}
         </tbody>
+
 
       </table>
       <div className="form-controls">
