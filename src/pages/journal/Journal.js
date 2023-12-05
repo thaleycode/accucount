@@ -226,60 +226,112 @@ function Journal() {
                 ) : null}
               </td>
               <td>
-                <select
-                  value={row.account1}
-                  onChange={(e) => handleSelectChange(index, 'account1', e.target.value)}
-                  style={{ width: '100%' }}
-                  disabled={row.account2 !== ''}
-                >
-                  <option value=""></option>
-                  {debitAccounts.map((account) => (
-                    <option key={account.number} value={account.number}>
-                      {`${account.number} ${account.name}`}
-                    </option>
-                  ))}
-                </select>
+                {index === 0 ? (
+                  <select
+                    value={row.account1}
+                    onChange={(e) => handleSelectChange(index, 'account1', e.target.value)}
+                    style={{ width: '100%' }}
+                  >
+                    <option value=""></option>
+                    {debitAccounts.map((account) => (
+                      <option key={account.number} value={account.number}>
+                        {`${account.number} ${account.name}`}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <select
+                    value={row.account1}
+                    onChange={(e) => handleSelectChange(index, 'account1', e.target.value)}
+                    style={{ width: '100%' }}
+                  >
+                    <option value=""></option>
+                    {debitAccounts.concat(creditAccounts).map((account) => (
+                      <option key={account.number} value={account.number}>
+                        {`${account.number} ${account.name}`}
+                      </option>
+                    ))}
+                  </select>
+                )}
               </td>
               <td>
-                <select
-                  value={row.account2}
-                  onChange={(e) => handleSelectChange(index, 'account2', e.target.value)}
-                  style={{ width: '100%' }}
-                  disabled={row.account1 !== ''}
-                >
-                  <option value=""></option>
-                  {creditAccounts.map((account) => (
-                    <option key={account.number} value={account.number}>
-                      {`${account.number} ${account.name}`}
-                    </option>
-                  ))}
-                </select>
+                {index === 0 ? (
+                  <select
+                    value={row.account2}
+                    onChange={(e) => handleSelectChange(index, 'account2', e.target.value)}
+                    style={{ width: '100%' }}
+                    disabled={row.account1 !== ''}
+                  >
+                    <option value=""></option>
+                    {creditAccounts.map((account) => (
+                      <option key={account.number} value={account.number}>
+                        {`${account.number} ${account.name}`}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <select
+                    value={row.account2}
+                    onChange={(e) => handleSelectChange(index, 'account2', e.target.value)}
+                    style={{ width: '100%' }}
+                  >
+                    <option value=""></option>
+                    {debitAccounts.concat(creditAccounts).map((account) => (
+                      <option key={account.number} value={account.number}>
+                        {`${account.number} ${account.name}`}
+                      </option>
+                    ))}
+                  </select>
+                )}
               </td>
               <td>
-                <input
-                  type="text"
-                  value={row.debitAmount}
-                  onChange={(e) => handleAmountChange(index, 'debitAmount', e.target.value)}
-                  min="0"
-                  style={{ width: '100%' }}
-                  inputMode="numeric"
-                  disabled={row.account2 !== ''}
-                />
+                {index === 0 ? (
+                  <input
+                    type="text"
+                    value={row.debitAmount}
+                    onChange={(e) => handleAmountChange(index, 'debitAmount', e.target.value)}
+                    min="0"
+                    style={{ width: '100%' }}
+                    inputMode="numeric"
+                  />
+                ) : (
+                  <input
+                    type="text"
+                    value={row.debitAmount}
+                    onChange={(e) => handleAmountChange(index, 'debitAmount', e.target.value)}
+                    min="0"
+                    style={{ width: '100%' }}
+                    inputMode="numeric"
+                    disabled={row.account2 !== ''}
+                  />
+                )}
               </td>
               <td>
-                <input
-                  type="text"
-                  value={row.creditAmount}
-                  onChange={(e) => handleAmountChange(index, 'creditAmount', e.target.value)}
-                  min="0"
-                  style={{ width: '100%' }}
-                  inputMode="numeric"
-                  disabled={row.account1 !== ''}
-                />
+                {index === 0 ? (
+                  <input
+                    type="text"
+                    value={row.creditAmount}
+                    onChange={(e) => handleAmountChange(index, 'creditAmount', e.target.value)}
+                    min="0"
+                    style={{ width: '100%' }}
+                    inputMode="numeric"
+                    disabled={row.account1 !== ''}
+                  />
+                ) : (
+                  <input
+                    type="text"
+                    value={row.creditAmount}
+                    onChange={(e) => handleAmountChange(index, 'creditAmount', e.target.value)}
+                    min="0"
+                    style={{ width: '100%' }}
+                    inputMode="numeric"
+                  />
+                )}
               </td>
             </tr>
           ))}
         </tbody>
+
       </table>
       <div className="form-controls">
         <div className="form-control">
