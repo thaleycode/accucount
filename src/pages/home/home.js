@@ -46,7 +46,6 @@ function Home(){
       value: "58%",
       status: "warning",
     },
-
     // Add more operating efficiency ratios here...
   ];
 
@@ -78,44 +77,30 @@ function Home(){
     // Add more leverage ratios here...
   ];
 
-  const pendingJournalEntries = [
-    {
-      date: "2023-11-22",
-      entryNumber: 12323,
-      user: "thal1023",
-    },
-    {
-      date: "2023-10-30",
-      entryNumber: 12344,
-      user: "jsmi1123",
-    },
-    // Add more pending journal entries here...
-  ];
+  const [pendingJournalEntries, setPendingJournalEntries] = useState([]);
+
+  // Fetch pending journal entries from the backend when the component mounts
+  useEffect(() => {
+    axios.get('http://localhost:3001/api/pending-journal-entries')
+      .then(response => {
+        setPendingJournalEntries(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching pending journal entries:', error);
+      });
+  }, []);
 
   const renderPendingJournalEntry = (entry) => (
-    <tr key={entry.entryNumber}>
-      <td>{entry.date}</td>
-      <td>{entry.entryNumber}</td>
+    <tr key={entry.transNumber}>
+      <td>{entry.submitDate}</td>
+      <td>{entry.transNumber}</td>
+      <td>{entry.transDate}</td>
       <td>{entry.user}</td>
       <td>
         <button className="view-button">View</button>
       </td>
     </tr>
   );
-
-  // Function to render a single table row
-  const renderTableRow = (ratio) => (
-    <tr key={ratio.name}>
-      <td className={`status-text ${ratio.status}`}>
-        {ratio.status === "good" && "Good"}
-        {ratio.status === "warning" && "Warning"}
-        {ratio.status === "alert" && "Alert"}
-      </td>
-      <td>{ratio.name}</td>
-      <td>{ratio.value}</td>
-    </tr>
-  );
-
 
   return (
     <div style={{ marginBottom: '50px' }}>
@@ -137,7 +122,17 @@ function Home(){
           </tr>
         </thead>
         <tbody>
-          {liquidityRatios.map((ratio) => renderTableRow(ratio))}
+          {liquidityRatios.map((ratio) => (
+            <tr key={ratio.name}>
+              <td className={`status-text ${ratio.status}`}>
+                {ratio.status === "good" && "Good"}
+                {ratio.status === "warning" && "Warning"}
+                {ratio.status === "alert" && "Alert"}
+              </td>
+              <td>{ratio.name}</td>
+              <td>{ratio.value}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
       <h3>Operating Efficiency Ratios</h3>
@@ -150,22 +145,42 @@ function Home(){
           </tr>
         </thead>
         <tbody>
-          {operatingEfficiencyRatios.map((ratio) => renderTableRow(ratio))}
+          {operatingEfficiencyRatios.map((ratio) => (
+            <tr key={ratio.name}>
+              <td className={`status-text ${ratio.status}`}>
+                {ratio.status === "good" && "Good"}
+                {ratio.status === "warning" && "Warning"}
+                {ratio.status === "alert" && "Alert"}
+              </td>
+              <td>{ratio.name}</td>
+              <td>{ratio.value}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
       <h3>Profitability Ratios</h3>
-        <table className="ratio-table">
-          <thead>
-            <tr>
-              <th>Status</th>
-              <th>Name</th>
-              <th>Value</th>
+      <table className="ratio-table">
+        <thead>
+          <tr>
+            <th>Status</th>
+            <th>Name</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          {profitabilityRatios.map((ratio) => (
+            <tr key={ratio.name}>
+              <td className={`status-text ${ratio.status}`}>
+                {ratio.status === "good" && "Good"}
+                {ratio.status === "warning" && "Warning"}
+                {ratio.status === "alert" && "Alert"}
+              </td>
+              <td>{ratio.name}</td>
+              <td>{ratio.value}</td>
             </tr>
-          </thead>
-          <tbody>
-            {profitabilityRatios.map((ratio) => renderTableRow(ratio))}
-          </tbody>
-        </table>
+          ))}
+        </tbody>
+      </table>
       <h3>Leverage Ratios</h3>
       <table className="ratio-table">
         <thead>
@@ -176,7 +191,17 @@ function Home(){
           </tr>
         </thead>
         <tbody>
-          {leverageRatios.map((ratio) => renderTableRow(ratio))}
+          {leverageRatios.map((ratio) => (
+            <tr key={ratio.name}>
+              <td className={`status-text ${ratio.status}`}>
+                {ratio.status === "good" && "Good"}
+                {ratio.status === "warning" && "Warning"}
+                {ratio.status === "alert" && "Alert"}
+              </td>
+              <td>{ratio.name}</td>
+              <td>{ratio.value}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
       <br></br>
@@ -186,8 +211,9 @@ function Home(){
       <table className="pending-entry-table">
         <thead>
           <tr>
-            <th>Date</th>
-            <th>Entry Number</th>
+            <th>Date Submitted</th>
+            <th>JE Number</th>
+            <th>Transaction Date</th>
             <th>User</th>
             <th>Action</th>
           </tr>
