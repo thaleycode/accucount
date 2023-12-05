@@ -18,6 +18,7 @@ import Journal from './pages/journal/Journal';
 import Reports from './pages/reports/Reports';
 import UserManagement from './pages/userManagement/UserManagement';
 import AccountDetails from './pages/accountDetails/AccountDetails';
+import CreateUser from './pages/createUser/CreateUser';
 import Axios from 'axios';
 
 function App() {
@@ -82,6 +83,7 @@ function App() {
         <Route path="/newUserSubmit" element={<NewUserSubmit />} />
         <Route path="/tempSuspend" element={<TempSuspend />} />
         <Route path="/formSubmitted" element={<FormSubmitted />} />
+        <Route path="/createUser" element={<CreateUser />} />
         <Route path="/addAccount" element={<AddAccount />} />
         <Route path="/accountList" element={<AccountList />} />
         <Route path="/account/:accountNumber" element={<AccountDetails />} />
