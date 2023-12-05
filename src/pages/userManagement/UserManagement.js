@@ -119,7 +119,9 @@ function UserManagement() {
             <h1>User Management</h1>
         </div>
         <div className="top-buttons">
-          <div className='left-button'><button className="create-new-user-button">+ Create New User</button></div>
+          <NavLink to="/createUser">
+            <button className="create-new-user-button">+ Create New User</button>
+          </NavLink>
           <div className='right-button'><button className="save-changes-button-top" onClick={handleSaveChanges}>Save Changes</button></div>
         </div>
               
