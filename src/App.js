@@ -10,7 +10,6 @@ import NewUserSubmit from './pages/newUserSubmit/NewUserSubmit';
 import TempSuspend from './pages/tempSuspend/TempSuspend';
 import FormSubmitted from './pages/formSubmitted/FormSubmitted';
 import AddAccount from './pages/addAccount/AddAccount';
-import AccountList from './pages/accountList/AccountList';
 import logo from './img/logo.svg';
 import ChartOfAccounts from './pages/chartOfAccounts/ChartOfAccounts';
 import GenerateReports from './pages/generateReports/GenerateReports';
@@ -19,6 +18,7 @@ import Reports from './pages/reports/Reports';
 import UserManagement from './pages/userManagement/UserManagement';
 import AccountDetails from './pages/accountDetails/AccountDetails';
 import CreateUser from './pages/createUser/CreateUser';
+import ViewJE from './pages/viewJE/ViewJE';
 import Axios from 'axios';
 
 function App() {
@@ -85,10 +85,10 @@ function App() {
         <Route path="/formSubmitted" element={<FormSubmitted />} />
         <Route path="/createUser" element={<CreateUser />} />
         <Route path="/addAccount" element={<AddAccount />} />
-        <Route path="/accountList" element={<AccountList />} />
         <Route path="/account/:accountNumber" element={<AccountDetails />} />
         <Route path="/chartOfAccounts" element={<ChartOfAccounts />} />
         <Route path="/journalize" element={<Journalize />} />
+        <Route path="/journalentries" element={<ViewJE />} />
         <Route path="/generateReports" element={<GenerateReports />} />
         <Route path="/reports" element={<Reports />} />
         <Route path="/userManagement" element={<UserManagement />} />

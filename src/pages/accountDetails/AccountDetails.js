@@ -5,10 +5,7 @@ import './AccountDetails.css';
 function AccountDetails() {
   const { accountNumber } = useParams(); // Get the account number from the URL params
   const [accountDetails, setAccountDetails] = useState(null); // State to store account details
-
-  // Define state and useEffect for fetching journal entries related to the account
-  const [journalEntries, setJournalEntries] = useState([]);
-  
+  const [journalEntries, setJournalEntries] = useState([]); // State to store journal entries
 
   useEffect(() => {
     // Fetch account details for the specific account using accountNumber
@@ -38,35 +35,34 @@ function AccountDetails() {
   }
 
   const calculateDebitCredit = (entry) => {
-    let debit = null;
-    let credit = null;
+    let debit = 0;
+    let credit = 0;
 
     // Loop through transAmt array to find the matching entry
     for (const item of entry.transAmt) {
       if (item.account == accountNumber) {
         if (item.side === 'Debit') {
-          debit = item.amount;
+          debit += item.amount;
         } else if (item.side === 'Credit') {
-          credit = item.amount;
+          credit += item.amount;
         }
       }
     }
     return { debit, credit };
   };
-  
+
   const calculateRunningBalance = (entries, category) => {
     let balance = 0;
 
     return entries.map((entry) => {
-      const debit = entry.transAmt.find((item) => item.account == accountNumber && item.side === 'Debit');
-      const credit = entry.transAmt.find((item) => item.account == accountNumber && item.side === 'Credit');
+      const debitCredit = calculateDebitCredit(entry);
 
       if (category === 'asset' || category === 'expense') {
         // For asset and expense categories, debit increases balance, credit decreases it
-        balance += (debit ? debit.amount : 0) - (credit ? credit.amount : 0);
+        balance += debitCredit.debit - debitCredit.credit;
       } else if (category === 'equity' || category === 'revenue' || category === 'liability') {
         // For equity, revenue, and liability categories, debit decreases balance, credit increases it
-        balance += (credit ? credit.amount : 0) - (debit ? debit.amount : 0);
+        balance += debitCredit.credit - debitCredit.debit;
       }
 
       return { ...entry, balance };
@@ -93,7 +89,7 @@ function AccountDetails() {
         <NavLink to="/chartOfAccounts" activeClassName="active">
           Chart of Accounts
         </NavLink>
-        <NavLink to="/journalize">Journalize</NavLink>
+        <NavLink to="/journal">Journal Entries</NavLink>
         <NavLink to="/generateReports">Generate Reports</NavLink>
         <NavLink to="/userManagement">User Management</NavLink>
       </div>

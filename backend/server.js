@@ -409,6 +409,25 @@ app.post('/account/add', async (req, res) => {
   }
 });
 
+
+//get journal entries for an account
+app.get('/journalEntries/:accountNumber', async (req, res) => {
+  const { accountNumber } = req.params;
+
+  try {
+    // Query the database for journal entries associated with the provided account number and where status is "approved"
+    const journalEntries = await JournalEntryModel.find({
+      'transAmt.account': parseInt(accountNumber), // Convert to a number if necessary
+      status: 'approved',
+    });
+
+    res.json(journalEntries);
+  } catch (error) {
+    console.error('Error fetching journal entries:', error);
+    res.status(500).json({ error: 'Failed to fetch journal entries' });
+  }
+});
+
 app.get('/api/pending-journal-entries', (req, res) => {
   JournalEntryModel.find({})
     .then((entries) => {
