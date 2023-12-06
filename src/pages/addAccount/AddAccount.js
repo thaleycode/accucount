@@ -63,12 +63,15 @@ function AddAccount() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const normalSide = getNormalSideText();
+
     const formDataToSubmit = {
       accountCategory: formData.accountCategory,
       accountNumber: formData.accountNumber,
       accountName: formData.accountName,
       balance: formData.balance,
       comment: formData.comment,
+      normalSide: normalSide,
     };
 
     console.log(formData);

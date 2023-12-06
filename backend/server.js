@@ -302,9 +302,27 @@ app.post('/update-users', async (req, res) => {
 // Api to submit journal entries
 app.post('/submit-journal-entry', async (req, res) => {
   try {
+    // Find the largest transNumber value in the database
+    let maxTransNumber = await JournalEntryModel.find({})
+      .sort({ transNumber: -1 })
+      .limit(1)
+      .then((result) => {
+        return result.length > 0 ? result[0].transNumber : 0;
+      })
+      .catch((error) => {
+        console.error('Error fetching max transNumber:', error);
+        return 0;
+      });
+
+    // Increment the transNumber for the new journal entry
+    maxTransNumber += 1;
+
     const { journalEntry } = req.body;
 
-    // Save journal entry to database
+    // Assign the incremented transNumber to the new journal entry
+    journalEntry.transNumber = maxTransNumber;
+
+    // Save journal entry to the database
     await JournalEntryModel.create(journalEntry);
 
     res.status(200).json({ message: 'Journal entry submitted successfully.' });

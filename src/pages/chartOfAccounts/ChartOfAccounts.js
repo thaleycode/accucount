@@ -22,15 +22,12 @@ function ChartOfAccounts() {
       });
   }, []);
 
-  
- const filterEntries = accounts.filter((account) => {
-  const accountNumber = parseInt(account.number);
+  // Filter the accounts based on selected criteria
+  const filteredAccounts = accounts.filter((account) => {
+    const accountNumber = parseInt(account.number);
 
-  // Check if the account number is valid (a number) and within the selected range
-  if (!isNaN(accountNumber)) {
+    // Check if the account number is valid (a number) and within the selected range
     let lowerBound, upperBound;
-
-    // Use a switch statement to set the bounds based on the selected account number
     switch (selectedAccountNumber) {
       case "1000s":
         lowerBound = 1000;
@@ -69,24 +66,23 @@ function ChartOfAccounts() {
         upperBound = 9999;
         break;
       default:
-        // Default case if no range is selected
         lowerBound = 0;
         upperBound = 10000;
         break;
     }
 
+
     return (
-      (searchString === '' ||
-        (account.number.toString().includes(searchString) ||
+      (!searchString ||
+        (account.number.includes(searchString) ||
           account.name.toLowerCase().includes(searchString.toLowerCase()))) &&
       (accountNumber >= lowerBound && accountNumber <= upperBound) &&
-      (selectedCategory === '' || account.category === selectedCategory) &&
-      (selectedAmount === '' || parseFloat(account.balance.replace('$', '').replace(',', '')) >= parseFloat(selectedAmount))
+      (!selectedCategory || account.category === selectedCategory) &&
+      (!selectedAmount ||
+        parseFloat(account.balance.replace('$', '').replace(',', '')) >=
+          parseFloat(selectedAmount))
     );
-  }
-
-  return false;
- });
+  });
 
   const handleSearchInput = (event) => {
     setSearchString(event.target.value);
@@ -102,6 +98,16 @@ function ChartOfAccounts() {
 
   const handleAmountChange = (event) => {
     setSelectedAmount(event.target.value);
+  };
+
+  // Sorting function to sort filteredAccounts by account number
+  filteredAccounts.sort((a, b) => parseInt(a.number) - parseInt(b.number));
+
+  const formatCurrency = (value) => {
+    return value.toLocaleString('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    });
   };
 
   return (
@@ -135,7 +141,10 @@ function ChartOfAccounts() {
           onChange={handleSearchInput}
           className="search-input"
         />
-        <select value={selectedAccountNumber} onChange={handleAccountNumberChange}>
+        <select
+          value={selectedAccountNumber}
+          onChange={handleAccountNumberChange}
+        >
           <option value="">All Account Numbers</option>
           <option value="1000s">1000-1999</option>
           <option value="2000s">2000-2999</option>
@@ -172,12 +181,11 @@ function ChartOfAccounts() {
               <th>Number</th>
               <th>Name</th>
               <th>Category</th>
-              <th>Financial Statement</th>
               <th>Balance</th>
             </tr>
           </thead>
           <tbody>
-            {filterEntries.map((account, rowIndex) => (
+            {filteredAccounts.map((account, rowIndex) => (
               <tr
                 key={rowIndex}
                 className={rowIndex % 2 === 0 ? 'white-row' : 'grey-row'}
@@ -194,17 +202,13 @@ function ChartOfAccounts() {
                 </td>
                 <td>
                   <Link to={`/account/${account.number}`}>
-                    {account.category.charAt(0).toUpperCase() + account.category.slice(1)}
+                    {account.category.charAt(0).toUpperCase() +
+                      account.category.slice(1)}
                   </Link>
                 </td>
                 <td>
                   <Link to={`/account/${account.number}`}>
-                    {account.financialStatement}
-                  </Link>
-                </td>
-                <td>
-                  <Link to={`/account/${account.number}`}>
-                    {account.balance}
+                    {formatCurrency(account.balance)}
                   </Link>
                 </td>
               </tr>
